@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Manage Sellers - KhatiFarm</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f8f3;
+    }
+
+    .navbar {
+      background: #2e7d32;
+      color: white;
+      padding: 18px 6%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1150px;
+      margin: 40px auto;
+      padding: 0 15px;
+    }
+
+    h1 {
+      color: #2e7d32;
+    }
+
+    .table-box {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #e8f5e9;
+      color: #2e7d32;
+      text-align: left;
+      padding: 15px;
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    tr:hover {
+      background: #f8faf8;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 11px 20px;
+      background: #2e7d32;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+  <strong>KhatiFarm Admin</strong>
+
+  <a th:href="@{/admin/dashboard}">
+    Dashboard
+  </a>
+
+</div>
+
+<div class="container">
+
+  <h1>Registered Sellers</h1>
+
+  <p>
+    View sellers registered on the KhatiFarm marketplace.
+  </p>
+
+  <div class="table-box">
+
+    <table>
+
+      <thead>
+      <tr>
+        <th>Seller Name</th>
+        <th>Business Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <tr th:each="seller : ${sellers}">
+
+        <td th:text="${seller.name}">
+          Seller Name
+        </td>
+
+        <td th:text="${seller.businessName}">
+          Business Name
+        </td>
+
+        <td th:text="${seller.email}">
+          Email
+        </td>
+
+        <td th:text="${seller.phone}">
+          Phone
+        </td>
+
+        <td th:text="${seller.address}">
+          Address
+        </td>
+
+      </tr>
+
+      <tr th:if="${#lists.isEmpty(sellers)}">
+
+        <td colspan="5" class="empty">
+          No registered sellers found.
+        </td>
+
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <a th:href="@{/admin/dashboard}"
+     class="back">
+    ← Back to Dashboard
+  </a>
+
+</div>
+
+</body>
+</html>

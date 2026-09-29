@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Seller Registration | KhatiFarm</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <style>
+
+        .register-container {
+            max-width: 650px;
+            margin: 50px auto;
+            padding: 35px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.10);
+        }
+
+        .register-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #2e7d32;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background: #1b5e20;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-link a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🌱 KhatiFarm
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">Home</a>
+
+        <a href="/products">
+            Products
+        </a>
+
+        <a href="/seller/login">
+            Seller Login
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="register-container">
+
+    <h1>🌾 Seller Registration</h1>
+
+    <form th:action="@{/seller/register}"
+          th:object="${seller}"
+          method="post">
+
+        <div class="form-group">
+
+            <label>Full Name</label>
+
+            <input type="text"
+                   th:field="*{name}"
+                   placeholder="Enter your full name"
+                   required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Email</label>
+
+            <input type="email"
+                   th:field="*{email}"
+                   placeholder="Enter your email"
+                   required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Phone Number</label>
+
+            <input type="text"
+                   th:field="*{phone}"
+                   placeholder="01XXXXXXXXX"
+                   required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Password</label>
+
+            <input type="password"
+                   th:field="*{password}"
+                   placeholder="Create a password"
+                   required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Business / Farm Name</label>
+
+            <input type="text"
+                   th:field="*{businessName}"
+                   placeholder="Example: Rahim Organic Farm"
+                   required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Address</label>
+
+            <textarea th:field="*{address}"
+                      placeholder="Enter your farm/business address"
+                      required></textarea>
+
+        </div>
+
+
+        <button type="submit"
+                class="register-btn">
+
+            Create Seller Account
+
+        </button>
+
+    </form>
+
+
+    <div class="login-link">
+
+        Already have an account?
+
+        <a href="/seller/login">
+            Login here
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Products | KhatiFarm</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8f3;
+            color: #222;
+        }
+
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #176b2c;
+            color: white;
+            padding: 16px 6%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #dff5df;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 12px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.14);
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .products-container {
+            width: 1150px;
+            max-width: 94%;
+            margin: 42px auto 70px;
+        }
+
+
+        /* ================= PAGE HEADER ================= */
+
+        .page-header {
+            background: linear-gradient(
+                    135deg,
+                    #176b2c,
+                    #2e8b43
+            );
+
+            color: white;
+            padding: 30px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                    0 7px 25px rgba(23,107,44,0.18);
+
+            margin-bottom: 22px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #e8f4e9;
+            font-size: 14px;
+        }
+
+        .page-header strong {
+            color: white;
+        }
+
+        .header-badge {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            background: rgba(255,255,255,0.13);
+            border: 1px solid rgba(255,255,255,0.25);
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+
+        /* ================= INFO BAR ================= */
+
+        .info-bar {
+            background: white;
+            border: 1px solid #e4ece4;
+            border-radius: 12px;
+
+            padding: 16px 18px;
+            margin-bottom: 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: #666;
+            font-size: 13px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .info-bar strong {
+            color: #176b2c;
+        }
+
+
+        /* ================= TABLE CONTAINER ================= */
+
+        .product-table-container {
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 16px;
+
+            box-shadow:
+                    0 6px 22px rgba(0,0,0,0.06);
+
+            border: 1px solid #e5ece5;
+
+            overflow-x: auto;
+        }
+
+
+        /* ================= TABLE ================= */
+
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        .product-table th {
+            padding: 15px 12px;
+
+            text-align: left;
+
+            background: #f5f8f5;
+
+            color: #555;
+
+            font-size: 12px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.3px;
+
+            border-bottom: 1px solid #e1e8e1;
+        }
+
+        .product-table td {
+            padding: 15px 12px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #edf0ed;
+
+            vertical-align: middle;
+
+            font-size: 13px;
+        }
+
+        .product-table tbody tr {
+            transition: 0.15s ease;
+        }
+
+        .product-table tbody tr:hover {
+            background: #fafcfa;
+        }
+
+        .product-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        /* ================= IMAGE ================= */
+
+        .product-image {
+            width: 68px;
+            height: 68px;
+
+            object-fit: cover;
+
+            border-radius: 10px;
+
+            border: 1px solid #e1e8e1;
+
+            display: block;
+        }
+
+
+        /* ================= PRODUCT NAME ================= */
+
+        .product-name {
+            font-weight: bold;
+            color: #222;
+            min-width: 120px;
+        }
+
+
+        /* ================= PRICE ================= */
+
+        .price {
+            color: #176b2c;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+
+        /* ================= STOCK ================= */
+
+        .stock {
+            font-weight: bold;
+        }
+
+
+        /* ================= QUALITY ================= */
+
+        .quality-score {
+            display: inline-block;
+
+            background: #eaf7ea;
+
+            color: #176b2c;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+
+        /* ================= GRADE ================= */
+
+        .grade {
+            display: inline-block;
+
+            background: #f5f8f5;
+
+            color: #176b2c;
+
+            border: 1px solid #dce8dc;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+
+            font-size: 12px;
+        }
+
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            text-transform: uppercase;
+
+            white-space: nowrap;
+        }
+
+        .pending {
+            background: #fff4d6;
+            color: #8a6500;
+            border: 1px solid #f1dfaa;
+        }
+
+        .approved {
+            background: #e7f5e9;
+            color: #176b2c;
+            border: 1px solid #cce5cf;
+        }
+
+        .rejected {
+            background: #fff0f0;
+            color: #b42318;
+            border: 1px solid #f1caca;
+        }
+
+
+        /* ================= ACTION ================= */
+
+        .edit-btn {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 8px 13px;
+
+            background: #176b2c;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            transition: 0.2s ease;
+
+            white-space: nowrap;
+        }
+
+        .edit-btn:hover {
+            background: #125724;
+            transform: translateY(-1px);
+        }
+
+
+        /* ================= EMPTY ================= */
+
+        .empty-message {
+            text-align: center;
+            padding: 65px 30px;
+            color: #777;
+        }
+
+        .empty-icon {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 15px;
+
+            background: #eaf7ea;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+        }
+
+        .empty-message h3 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .empty-message p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+
+        /* ================= BOTTOM ACTIONS ================= */
+
+        .bottom-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .back-btn,
+        .add-btn {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            transition: 0.2s ease;
+        }
+
+        .back-btn {
+            background: #edf2ed;
+            color: #333;
+            border: 1px solid #dce5dc;
+        }
+
+        .back-btn:hover {
+            background: #e3eae3;
+        }
+
+        .add-btn {
+            background: #176b2c;
+            color: white;
+        }
+
+        .add-btn:hover {
+            background: #125724;
+        }
+
+
+        /* ================= VERIFICATION NOTICE ================= */
+
+        .notice {
+            margin-top: 20px;
+
+            padding: 17px;
+
+            background: #fffdf2;
+
+            border: 1px solid #eee4b9;
+
+            border-radius: 10px;
+        }
+
+        .notice strong {
+            display: block;
+
+            color: #725f00;
+
+            margin-bottom: 5px;
+
+            font-size: 13px;
+        }
+
+        .notice span {
+            color: #777;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 14px;
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .products-container {
+                max-width: 94%;
+                margin-top: 25px;
+            }
+
+            .page-header {
+                padding: 24px;
+            }
+
+            .page-header h1 {
+                font-size: 25px;
+            }
+
+            .bottom-actions {
+                flex-direction: column;
+            }
+
+            .back-btn,
+            .add-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🌱 Khati<span>Farm</span>
+    </div>
+
+
+    <div class="nav-links">
+
+        <a th:href="@{/}">
+            Home
+        </a>
+
+        <a th:href="@{/products}">
+            Products
+        </a>
+
+        <a th:href="@{/seller/dashboard}">
+            Dashboard
+        </a>
+
+        <a th:href="@{/seller/logout}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="products-container">
+
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="page-header">
+
+        <h1>
+            📋 My Products
+        </h1>
+
+        <p>
+
+            Seller:
+
+            <strong th:text="${sellerName}">
+                Seller
+            </strong>
+
+        </p>
+
+        <div class="header-badge">
+            🌾 Seller Product Management
+        </div>
+
+    </div>
+
+
+    <!-- ================= INFO BAR ================= -->
+
+    <div class="info-bar">
+
+        🔍
+
+        <span>
+
+            Products submitted by you are reviewed by the
+            <strong>KhatiFarm Admin</strong> before approval.
+
+            Quality score, grade and approved price are assigned
+            during verification.
+
+        </span>
+
+    </div>
+
+
+    <!-- ================= TABLE ================= -->
+
+    <div class="product-table-container">
+
+
+        <!-- PRODUCTS AVAILABLE -->
+
+        <table class="product-table"
+               th:if="${not #lists.isEmpty(products)}">
+
+            <thead>
+
+            <tr>
+
+                <th>
+                    Image
+                </th>
+
+                <th>
+                    Product
+                </th>
+
+                <th>
+                    Category
+                </th>
+
+                <th>
+                    Price
+                </th>
+
+                <th>
+                    Stock
+                </th>
+
+                <th>
+                    Quality
+                </th>
+
+                <th>
+                    Grade
+                </th>
+
+                <th>
+                    Status
+                </th>
+
+                <th>
+                    Action
+                </th>
+
+            </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            <tr th:each="product : ${products}">
+
+
+                <!-- IMAGE -->
+
+                <td>
+
+                    <img class="product-image"
+                         th:src="@{${product.imageUrl}}"
+                         th:alt="${product.name}">
+
+                </td>
+
+
+                <!-- PRODUCT -->
+
+                <td>
+
+                    <div class="product-name"
+                         th:text="${product.name}">
+
+                        Product
+
+                    </div>
+
+                </td>
+
+
+                <!-- CATEGORY -->
+
+                <td th:text="${product.category}">
+                    Category
+                </td>
+
+
+                <!-- PRICE -->
+
+                <td>
+
+                    <span class="price">
+
+                        ৳
+
+                        <span th:text="${product.price}">
+                            0
+                        </span>
+
+                    </span>
+
+                </td>
+
+
+                <!-- STOCK -->
+
+                <td>
+
+                    <span class="stock"
+                          th:text="${product.stock}">
+
+                        0
+
+                    </span>
+
+                </td>
+
+
+                <!-- QUALITY -->
+
+                <td>
+
+                    <span class="quality-score">
+
+                        <span th:text="${product.qualityScore}">
+                            0
+                        </span>/100
+
+                    </span>
+
+                </td>
+
+
+                <!-- GRADE -->
+
+                <td>
+
+                    <span class="grade"
+                          th:text="${product.grade}">
+
+                        PENDING
+
+                    </span>
+
+                </td>
+
+
+                <!-- STATUS -->
+
+                <td>
+
+                    <span class="status"
+                          th:classappend="${product.status == 'APPROVED'} ? ' approved' :
+                                          (${product.status == 'REJECTED'} ? ' rejected' : ' pending')"
+                          th:text="${product.status}">
+
+                        PENDING
+
+                    </span>
+
+                </td>
+
+
+                <!-- EDIT -->
+
+                <td>
+
+                    <a th:href="@{'/seller/products/edit/' + ${product.id}}"
+                       class="edit-btn">
+
+                        ✏️ Edit
+
+                    </a>
+
+                </td>
+
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <!-- ================= EMPTY ================= -->
+
+        <div class="empty-message"
+             th:if="${#lists.isEmpty(products)}">
+
+            <div class="empty-icon">
+                📦
+            </div>
+
+            <h3>
+                No Products Submitted Yet
+            </h3>
+
+            <p>
+                You haven't submitted any products.
+                Add your first organic product for admin verification.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= BOTTOM ACTIONS ================= -->
+
+    <div class="bottom-actions">
+
+        <a th:href="@{/seller/dashboard}"
+           class="back-btn">
+
+            ← Back to Dashboard
+
+        </a>
+
+
+        <a th:href="@{/seller/products/add}"
+           class="add-btn">
+
+            ➕ Submit New Product
+
+        </a>
+
+    </div>
+
+
+    <!-- ================= NOTICE ================= -->
+
+    <div class="notice">
+
+        <strong>
+            🔍 Important: Admin Verification
+        </strong>
+
+        <span>
+            A seller product is not immediately published in the marketplace.
+            The KhatiFarm admin reviews the submitted product and controls
+            its quality score, grade and approved price before it becomes
+            available to customers.
+        </span>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

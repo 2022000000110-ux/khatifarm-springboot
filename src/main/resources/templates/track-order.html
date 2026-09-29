@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Track Order | KhatiFarm</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8f3;
+            color: #222;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #176b2c;
+            color: white;
+            padding: 16px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #dff5df;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 12px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.14);
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .container {
+            width: 1000px;
+            max-width: 92%;
+            margin: 45px auto 70px;
+        }
+
+        .box {
+            background: white;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.06);
+            border: 1px solid #e5ece5;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .tracking-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            background: #eaf7ea;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+        }
+
+        h1 {
+            color: #176b2c;
+            margin: 0 0 10px;
+            font-size: 31px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin: 0;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+
+        /* ================= ERROR ================= */
+
+        .error {
+            background: #fff0f0;
+            color: #c62828;
+            padding: 14px 16px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #ffcdd2;
+            font-size: 14px;
+        }
+
+
+        /* ================= TRACK FORM ================= */
+
+        .tracking-form {
+            background: linear-gradient(
+                    135deg,
+                    #f8fbf8,
+                    #f1f8f1
+            );
+
+            padding: 24px;
+            border-radius: 14px;
+            border: 1px solid #dfeade;
+        }
+
+        .form-title {
+            color: #176b2c;
+            font-size: 18px;
+            margin: 0 0 6px;
+        }
+
+        .form-subtitle {
+            color: #777;
+            font-size: 13px;
+            margin: 0 0 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #444;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #ccd8cc;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            transition: 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #176b2c;
+            box-shadow: 0 0 0 3px rgba(23,107,44,0.08);
+        }
+
+        .track-btn {
+            width: 100%;
+            margin-top: 18px;
+            padding: 13px;
+            background: #176b2c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .track-btn:hover {
+            background: #125724;
+            transform: translateY(-1px);
+        }
+
+
+        /* ================= RESULT ================= */
+
+        .result {
+            margin-top: 32px;
+            border-top: 1px solid #e8eee8;
+            padding-top: 30px;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .result h2 {
+            color: #176b2c;
+            margin: 0 0 5px;
+            font-size: 23px;
+        }
+
+        .result-subtitle {
+            color: #777;
+            margin: 0;
+            font-size: 13px;
+        }
+
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #fff4d6;
+            color: #8a6500;
+            border: 1px solid #f1dfaa;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+
+        /* ================= ORDER INFO ================= */
+
+        .section-title {
+            color: #176b2c;
+            font-size: 18px;
+            margin: 28px 0 15px;
+        }
+
+        .order-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .info {
+            background: #f8faf8;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e8eee8;
+        }
+
+        .info strong {
+            display: block;
+            font-size: 11px;
+            color: #777;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .info span {
+            word-break: break-word;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+
+        /* ================= STATUS GUIDE ================= */
+
+        .status-guide {
+            margin-top: 24px;
+            padding: 18px;
+            background: #f8faf8;
+            border-radius: 10px;
+            border: 1px solid #e5ebe5;
+        }
+
+        .status-guide h3 {
+            margin: 0 0 12px;
+            color: #176b2c;
+            font-size: 16px;
+        }
+
+        .status-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .status-item {
+            padding: 7px 11px;
+            background: white;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #555;
+            border: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+
+        /* ================= PRODUCTS ================= */
+
+        .products {
+            margin-top: 28px;
+        }
+
+        .products h3 {
+            color: #176b2c;
+            margin: 0 0 15px;
+            font-size: 18px;
+        }
+
+        .product {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #fafcfa;
+            border: 1px solid #edf2ed;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .product-image {
+            width: 72px;
+            height: 72px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid #e3e9e3;
+            flex-shrink: 0;
+        }
+
+        .product-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #222;
+            font-size: 15px;
+        }
+
+        .product-details {
+            color: #777;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .quality {
+            color: #176b2c;
+            font-weight: bold;
+        }
+
+        .grade {
+            display: inline-block;
+            background: #eaf7ea;
+            color: #176b2c;
+            padding: 2px 7px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .product-price {
+            font-weight: bold;
+            color: #176b2c;
+            white-space: nowrap;
+            font-size: 15px;
+        }
+
+
+        /* ================= TOTAL ================= */
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #edf0ed;
+            font-size: 22px;
+            font-weight: bold;
+            color: #176b2c;
+        }
+
+
+        /* ================= ACTIONS ================= */
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .back,
+        .shop-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            transition: 0.2s ease;
+        }
+
+        .back {
+            background: #edf2ed;
+            color: #333;
+            border: 1px solid #dce5dc;
+        }
+
+        .back:hover {
+            background: #e3eae3;
+        }
+
+        .shop-btn {
+            background: #176b2c;
+            color: white;
+        }
+
+        .shop-btn:hover {
+            background: #125724;
+            transform: translateY(-1px);
+        }
+
+
+        /* ================= HELP ================= */
+
+        .help-box {
+            margin-top: 25px;
+            padding: 18px;
+            background: #fffdf4;
+            border: 1px solid #eee5bd;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .help-box strong {
+            color: #735f00;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .help-box span {
+            color: #777;
+            font-size: 12px;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 750px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 14px;
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-info {
+                grid-template-columns: 1fr;
+            }
+
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .product {
+                align-items: flex-start;
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .container {
+                max-width: 94%;
+                margin-top: 25px;
+            }
+
+            .box {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .tracking-form {
+                padding: 18px;
+            }
+
+            .product {
+                display: grid;
+                grid-template-columns: 65px 1fr;
+            }
+
+            .product-image {
+                width: 65px;
+                height: 65px;
+            }
+
+            .product-price {
+                grid-column: 2;
+            }
+
+            .total {
+                font-size: 19px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .back,
+            .shop-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🌱 Khati<span>Farm</span>
+    </div>
+
+    <div class="nav-links">
+
+        <a th:href="@{/}">
+            Home
+        </a>
+
+        <a th:href="@{/products}">
+            Products
+        </a>
+
+        <a th:href="@{/cart}">
+            🛒 Cart
+        </a>
+
+        <a th:href="@{/customer/login}">
+            Customer Login
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+    <div class="box">
+
+
+        <!-- ================= HEADER ================= -->
+
+        <div class="page-header">
+
+            <div class="tracking-icon">
+                📦
+            </div>
+
+            <h1>
+                Track Your Order
+            </h1>
+
+            <p class="subtitle">
+
+                Enter your Order ID and phone number
+                to securely check your order status.
+
+            </p>
+
+        </div>
+
+
+        <!-- ================= ERROR ================= -->
+
+        <div th:if="${error}"
+             class="error"
+             th:text="${error}">
+
+            Order not found!
+
+        </div>
+
+
+        <!-- ================= TRACK FORM ================= -->
+
+        <div class="tracking-form">
+
+            <h2 class="form-title">
+                🔎 Find Your Order
+            </h2>
+
+            <p class="form-subtitle">
+                Use the Order ID and phone number provided during checkout.
+            </p>
+
+
+            <form th:action="@{/track-order/search}"
+                  method="post">
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="orderId">
+                            Order ID
+                        </label>
+
+                        <input
+                                type="text"
+                                id="orderId"
+                                name="orderId"
+                                placeholder="Enter your Order ID"
+                                required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone Number
+                        </label>
+
+                        <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="01XXXXXXXXX"
+                                pattern="01[0-9]{9}"
+                                maxlength="11"
+                                required>
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit"
+                        class="track-btn">
+
+                    🔍 Track My Order
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= ORDER RESULT ================= -->
+
+        <div class="result"
+             th:if="${order != null}">
+
+
+            <div class="result-header">
+
+                <div>
+
+                    <h2>
+                        ✅ Order Found
+                    </h2>
+
+                    <p class="result-subtitle">
+                        Here are the details of your order.
+                    </p>
+
+                </div>
+
+
+                <span class="status"
+                      th:text="${order.status}">
+
+                    PENDING
+
+                </span>
+
+            </div>
+
+
+            <!-- ================= ORDER INFORMATION ================= -->
+
+            <h3 class="section-title">
+                📋 Order Information
+            </h3>
+
+            <div class="order-info">
+
+
+                <div class="info">
+
+                    <strong>
+                        Order ID
+                    </strong>
+
+                    <span th:text="${order.id}">
+                        ORDER-ID
+                    </span>
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>
+                        Customer
+                    </strong>
+
+                    <span th:text="${order.customerName}">
+                        Customer Name
+                    </span>
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>
+                        Phone
+                    </strong>
+
+                    <span th:text="${order.phone}">
+                        01XXXXXXXXX
+                    </span>
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>
+                        Payment Method
+                    </strong>
+
+                    <span th:text="${order.paymentMethod}">
+                        Cash on Delivery
+                    </span>
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>
+                        Delivery Address
+                    </strong>
+
+                    <span th:text="${order.address}">
+                        Dhaka
+                    </span>
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>
+                        Order Status
+                    </strong>
+
+                    <span class="status"
+                          th:text="${order.status}">
+                        PENDING
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= STATUS GUIDE ================= -->
+
+            <div class="status-guide">
+
+                <h3>
+                    📊 Order Status Guide
+                </h3>
+
+                <div class="status-list">
+
+                    <span class="status-item">
+                        PENDING
+                    </span>
+
+                    <span class="status-item">
+                        PROCESSING
+                    </span>
+
+                    <span class="status-item">
+                        SHIPPED
+                    </span>
+
+                    <span class="status-item">
+                        DELIVERED
+                    </span>
+
+                    <span class="status-item">
+                        CANCELLED
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= PRODUCTS ================= -->
+
+            <div class="products">
+
+                <h3>
+                    🛍️ Ordered Products
+                </h3>
+
+
+                <div th:each="item : ${order.items}"
+                     class="product">
+
+
+                    <img class="product-image"
+                         th:src="@{${item.imageUrl}}"
+                         th:alt="${item.productName}">
+
+
+                    <div class="product-info">
+
+                        <div class="product-name"
+                             th:text="${item.productName}">
+
+                            Product Name
+
+                        </div>
+
+
+                        <div class="product-details">
+
+                            Quantity:
+
+                            <strong th:text="${item.quantity}">
+                                1
+                            </strong>
+
+                            × ৳
+
+                            <strong th:text="${item.price}">
+                                0
+                            </strong>
+
+                            <br>
+
+                            Quality:
+
+                            <span class="quality"
+                                  th:text="${item.qualityScore}">
+                                0
+                            </span>/100
+
+                            &nbsp; | &nbsp;
+
+                            Grade:
+
+                            <span class="grade"
+                                  th:text="${item.grade}">
+                                A+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-price">
+
+                        ৳
+
+                        <span th:text="${item.subtotal}">
+                            0
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= TOTAL ================= -->
+
+            <div class="total">
+
+                <span>
+                    Total Amount
+                </span>
+
+                <span>
+
+                    ৳
+
+                    <span th:text="${order.total}">
+                        0
+                    </span>
+
+                </span>
+
+            </div>
+
+
+            <!-- ================= ACTIONS ================= -->
+
+            <div class="actions">
+
+                <a th:href="@{/products}"
+                   class="shop-btn">
+
+                    🛍️ Continue Shopping
+
+                </a>
+
+
+                <a th:href="@{/cart}"
+                   class="back">
+
+                    🛒 View Cart
+
+                </a>
+
+            </div>
+
+
+            <!-- ================= HELP ================= -->
+
+            <div class="help-box">
+
+                <strong>
+                    Need help with your order?
+                </strong>
+
+                <span>
+                    Keep your Order ID and phone number available
+                    when contacting KhatiFarm about your order.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= DEFAULT ACTION ================= -->
+
+        <div th:if="${order == null}"
+             style="text-align:center; margin-top:25px;">
+
+            <a th:href="@{/products}"
+               class="back">
+
+                ← Continue Shopping
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

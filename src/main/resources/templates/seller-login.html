@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Seller Login | KhatiFarm</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <style>
+
+        .login-container {
+            max-width: 450px;
+            margin: 70px auto;
+            padding: 35px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.10);
+        }
+
+        .login-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 6px;
+            background: #2e7d32;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #1b5e20;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🌱 KhatiFarm
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">Home</a>
+
+        <a href="/products">
+            Products
+        </a>
+
+        <a href="/seller/register">
+            Register
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="login-container">
+
+    <h1>🌾 Seller Login</h1>
+
+
+    <!-- Login Error -->
+
+    <div class="error-message"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
+
+
+    <form th:action="@{/seller/login}"
+          method="post">
+
+        <div class="form-group">
+
+            <label>Email</label>
+
+            <input type="email"
+                   name="email"
+                   placeholder="Enter your email"
+                   required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Password</label>
+
+            <input type="password"
+                   name="password"
+                   placeholder="Enter your password"
+                   required>
+
+        </div>
+
+
+        <button type="submit"
+                class="login-btn">
+
+            Login as Seller
+
+        </button>
+
+    </form>
+
+
+    <div class="register-link">
+
+        Don't have a seller account?
+
+        <a href="/seller/register">
+            Create Account
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

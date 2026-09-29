@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Submit Product | KhatiFarm
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f8f3;
+
+            color: #263238;
+        }
+
+        .nav {
+
+            background: white;
+
+            padding:
+                    18px 6%;
+
+            display: flex;
+
+            justify-content:
+                    space-between;
+
+            align-items: center;
+
+            box-shadow:
+                    0 2px 12px
+                    rgba(0,0,0,.07);
+        }
+
+        .logo {
+
+            font-size: 24px;
+
+            font-weight: 800;
+
+            color: #2e7d32;
+        }
+
+        .nav a {
+
+            color: #263238;
+
+            text-decoration: none;
+
+            margin-left: 20px;
+
+            font-weight: 600;
+        }
+
+        .nav a:hover {
+
+            color: #2e7d32;
+        }
+
+        .container {
+
+            max-width: 1000px;
+
+            margin:
+                    40px auto;
+
+            padding:
+                    0 20px;
+        }
+
+        .header {
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #1b5e20,
+                            #43a047
+                    );
+
+            color: white;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            margin-bottom: 22px;
+        }
+
+        .header h1 {
+
+            margin:
+                    0 0 8px;
+        }
+
+        .header p {
+
+            margin: 0;
+
+            opacity: .9;
+        }
+
+        .card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            box-shadow:
+                    0 8px 28px
+                    rgba(0,0,0,.07);
+        }
+
+        .notice {
+
+            background: #fff8e1;
+
+            border:
+                    1px solid #ffe082;
+
+            color: #795548;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            line-height: 1.6;
+        }
+
+        .error {
+
+            background: #ffebee;
+
+            color: #c62828;
+
+            padding: 12px;
+
+            border-radius: 9px;
+
+            margin-bottom: 18px;
+        }
+
+        .grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 18px;
+        }
+
+        .full {
+
+            grid-column:
+                    1 / -1;
+        }
+
+        label {
+
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            margin-bottom: 7px;
+
+            color: #37474f;
+        }
+
+        input,
+        select,
+        textarea {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border:
+                    1px solid #d5ddd6;
+
+            border-radius: 9px;
+
+            font: inherit;
+
+            background: white;
+        }
+
+        textarea {
+
+            min-height: 125px;
+
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+
+            outline: none;
+
+            border-color:
+                    #2e7d32;
+
+            box-shadow:
+                    0 0 0 3px
+                    rgba(46,125,50,.08);
+        }
+
+        .help {
+
+            font-size: 12px;
+
+            color: #78909c;
+
+            margin-top: 6px;
+        }
+
+        .actions {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 25px;
+        }
+
+        .btn {
+
+            border: 0;
+
+            border-radius: 9px;
+
+            padding:
+                    13px 22px;
+
+            font-weight: 800;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            text-align: center;
+        }
+
+        .primary {
+
+            background: #2e7d32;
+
+            color: white;
+        }
+
+        .primary:hover {
+
+            background: #256628;
+        }
+
+        .secondary {
+
+            background: #eceff1;
+
+            color: #263238;
+        }
+
+        @media(max-width:700px) {
+
+            .grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+
+                grid-column: auto;
+            }
+
+            .nav {
+
+                flex-direction: column;
+
+                gap: 12px;
+            }
+
+            .nav a {
+
+                margin:
+                        0 7px;
+            }
+
+            .actions {
+
+                flex-direction: column;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- ================= NAV ================= -->
+
+<nav class="nav">
+
+    <div class="logo">
+
+        🌱 KhatiFarm Seller
+
+    </div>
+
+    <div>
+
+        <a th:href="@{/seller/dashboard}">
+            Dashboard
+        </a>
+
+        <a th:href="@{/seller/products}">
+            My Products
+        </a>
+
+        <a th:href="@{/seller/logout}">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="container">
+
+
+    <div class="header">
+
+        <h1>
+            + Submit a Product
+        </h1>
+
+        <p>
+            Add your product to the KhatiFarm
+            quality-based marketplace.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+
+        <!-- VERIFICATION NOTICE -->
+
+        <div class="notice">
+
+            <strong>
+                🔎 Admin Verification Required
+            </strong>
+
+            <br>
+
+            After submission, the product will remain
+            <strong>PENDING</strong>.
+
+            KhatiFarm will verify quality,
+            assign the quality score/grade and
+            approve the marketplace price.
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div class="error"
+             th:if="${error}"
+             th:text="${error}">
+
+            Error
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form th:action="@{/seller/products/save}"
+              th:object="${product}"
+              method="post"
+              enctype="multipart/form-data">
+
+
+            <div class="grid">
+
+
+                <!-- NAME -->
+
+                <div>
+
+                    <label>
+                        Product Name
+                    </label>
+
+                    <input type="text"
+                           th:field="*{name}"
+                           placeholder="Product name"
+                           required>
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div>
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select th:field="*{category}"
+                            required>
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="Honey">
+                            Honey
+                        </option>
+
+                        <option value="Mango">
+                            Mango
+                        </option>
+
+                        <option value="Vegetables">
+                            Vegetables
+                        </option>
+
+                        <option value="Oil">
+                            Oil
+                        </option>
+
+                        <option value="Gur">
+                            Gur
+                        </option>
+
+                        <option value="Dry Food">
+                            Dry Food
+                        </option>
+
+                        <option value="Powder">
+                            Powder
+                        </option>
+
+                        <option value="Tea">
+                            Tea
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ORIGIN -->
+
+                <div>
+
+                    <label>
+                        Origin
+                    </label>
+
+                    <input type="text"
+                           th:field="*{origin}"
+                           placeholder="Where is the product from?"
+                           required>
+
+                </div>
+
+
+                <!-- IMAGE -->
+
+                <div>
+
+                    <label>
+                        Product Image
+                    </label>
+
+                    <input type="file"
+                           name="imageFile"
+                           accept=".jpg,.jpeg,.png,.webp"
+                           required>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="full">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea th:field="*{description}"
+                              placeholder="Tell customers about your product..."
+                              required>
+                    </textarea>
+
+                </div>
+
+
+                <!-- BENEFITS -->
+
+                <div class="full">
+
+                    <label>
+                        Benefits & Uses
+                    </label>
+
+                    <textarea th:field="*{benefits}"
+                              placeholder="Explain benefits, uses and important product information..."
+                              required>
+                    </textarea>
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div>
+
+                    <label>
+                        Your Asking Price (৳)
+                    </label>
+
+                    <input type="number"
+                           th:field="*{price}"
+                           min="0"
+                           step="0.01"
+                           required>
+
+                    <div class="help">
+
+                        Final marketplace price is
+                        subject to admin approval.
+
+                    </div>
+
+                </div>
+
+
+                <!-- STOCK -->
+
+                <div>
+
+                    <label>
+                        Available Stock
+                    </label>
+
+                    <input type="number"
+                           th:field="*{stock}"
+                           min="0"
+                           required>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="actions">
+
+                <button
+                        class="btn primary"
+                        type="submit">
+
+                    📤 Submit for Verification
+
+                </button>
+
+
+                <a class="btn secondary"
+                   th:href="@{/seller/products}">
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

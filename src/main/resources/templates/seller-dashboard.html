@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Seller Dashboard | KhatiFarm</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8f3;
+            color: #222;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #176b2c;
+            color: white;
+            padding: 16px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #dff5df;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 12px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.14);
+        }
+
+        .logout {
+            background: white;
+            color: #176b2c !important;
+            font-weight: bold;
+        }
+
+
+        /* ================= CONTAINER ================= */
+
+        .dashboard-container {
+            width: 1100px;
+            max-width: 92%;
+            margin: 42px auto 70px;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .dashboard-header {
+            background: linear-gradient(
+                    135deg,
+                    #176b2c,
+                    #2e8b43
+            );
+
+            color: white;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 7px 25px rgba(23,107,44,0.18);
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::after {
+            content: "🌾";
+            position: absolute;
+            right: 35px;
+            bottom: -18px;
+            font-size: 100px;
+            opacity: 0.12;
+        }
+
+        .dashboard-header h1 {
+            margin: 0 0 10px;
+            font-size: 30px;
+        }
+
+        .dashboard-header p {
+            margin: 7px 0;
+            color: #e7f4e8;
+            font-size: 14px;
+        }
+
+        .dashboard-header strong {
+            color: white;
+        }
+
+
+        /* ================= SELLER BADGE ================= */
+
+        .seller-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 15px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.13);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+
+        /* ================= QUICK STATS ================= */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #e4ece4;
+            box-shadow: 0 4px 17px rgba(0,0,0,0.05);
+        }
+
+        .stat-icon {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card h3 {
+            margin: 0 0 5px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .stat-card p {
+            margin: 0;
+            color: #777;
+            font-size: 12px;
+        }
+
+
+        /* ================= ACTIONS ================= */
+
+        .section-title {
+            color: #176b2c;
+            font-size: 20px;
+            margin: 0 0 15px;
+        }
+
+        .dashboard-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .action-card {
+            background: white;
+            padding: 24px;
+            border-radius: 15px;
+            border: 1px solid #e4ece4;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: 0.2s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 25px rgba(0,0,0,0.08);
+        }
+
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: #eaf7ea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .action-card h3 {
+            margin: 0 0 8px;
+            color: #333;
+            font-size: 17px;
+        }
+
+        .action-card p {
+            color: #777;
+            margin: 0 0 20px;
+            line-height: 1.6;
+            font-size: 13px;
+            min-height: 42px;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 11px 16px;
+            background: #176b2c;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            transition: 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #125724;
+        }
+
+
+        /* ================= SELLER INFORMATION ================= */
+
+        .seller-info {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e4ece4;
+        }
+
+        .seller-info-header {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 22px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #edf0ed;
+        }
+
+        .profile-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #eaf7ea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 23px;
+        }
+
+        .seller-info h2 {
+            margin: 0;
+            color: #176b2c;
+            font-size: 20px;
+        }
+
+        .seller-info-subtitle {
+            color: #777;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .info-card {
+            background: #f8faf8;
+            border: 1px solid #edf2ed;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .info-label {
+            display: block;
+            color: #777;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 7px;
+        }
+
+        .info-value {
+            color: #222;
+            font-size: 14px;
+            font-weight: 600;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+
+
+        /* ================= SELLER NOTICE ================= */
+
+        .notice {
+            margin-top: 20px;
+            padding: 17px;
+            background: #fffdf2;
+            border: 1px solid #eee4b9;
+            border-radius: 10px;
+        }
+
+        .notice strong {
+            display: block;
+            color: #725f00;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .notice span {
+            color: #777;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 850px) {
+
+            .stats-grid,
+            .dashboard-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 14px;
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .dashboard-container {
+                max-width: 94%;
+                margin-top: 25px;
+            }
+
+            .dashboard-header {
+                padding: 24px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 25px;
+            }
+
+            .seller-info {
+                padding: 21px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🌱 Khati<span>Farm</span>
+    </div>
+
+    <div class="nav-links">
+
+        <a th:href="@{/}">
+            Home
+        </a>
+
+        <a th:href="@{/products}">
+            Products
+        </a>
+
+        <a th:href="@{/seller/dashboard}">
+            Dashboard
+        </a>
+
+        <a th:href="@{/seller/logout}"
+           class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="dashboard-container">
+
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="dashboard-header">
+
+        <h1>
+            🌾 Seller Dashboard
+        </h1>
+
+        <p>
+
+            Welcome back,
+
+            <strong th:text="${seller.name}">
+                Seller
+            </strong>
+
+        </p>
+
+        <p>
+
+            Business:
+
+            <strong th:text="${seller.businessName}">
+                Business Name
+            </strong>
+
+        </p>
+
+        <div class="seller-badge">
+            ✓ Local Seller Account
+        </div>
+
+    </div>
+
+
+    <!-- ================= QUICK STATS ================= -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📦
+            </div>
+
+            <h3>
+                Product Management
+            </h3>
+
+            <p>
+                Submit and manage your products.
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🔍
+            </div>
+
+            <h3>
+                Admin Verification
+            </h3>
+
+            <p>
+                Products require admin review before approval.
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🛒
+            </div>
+
+            <h3>
+                Seller Orders
+            </h3>
+
+            <p>
+                View orders containing your products.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ACTION SECTION ================= -->
+
+    <h2 class="section-title">
+        Seller Actions
+    </h2>
+
+
+    <div class="dashboard-actions">
+
+
+        <!-- ADD PRODUCT -->
+
+        <div class="action-card">
+
+            <div class="action-icon">
+                ➕
+            </div>
+
+            <h3>
+                Submit Product
+            </h3>
+
+            <p>
+                Submit a new organic product
+                for admin verification and approval.
+            </p>
+
+            <a th:href="@{/seller/products/add}"
+               class="action-btn">
+
+                Add Product →
+
+            </a>
+
+        </div>
+
+
+        <!-- MY PRODUCTS -->
+
+        <div class="action-card">
+
+            <div class="action-icon">
+                📋
+            </div>
+
+            <h3>
+                My Products
+            </h3>
+
+            <p>
+                View submitted products,
+                quality scores and approval status.
+            </p>
+
+            <a th:href="@{/seller/products}"
+               class="action-btn">
+
+                View Products →
+
+            </a>
+
+        </div>
+
+
+        <!-- MY ORDERS -->
+
+        <div class="action-card">
+
+            <div class="action-icon">
+                🛒
+            </div>
+
+            <h3>
+                My Orders
+            </h3>
+
+            <p>
+                View orders that contain
+                products submitted by you.
+            </p>
+
+            <a th:href="@{/seller/orders}"
+               class="action-btn">
+
+                View Orders →
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SELLER INFORMATION ================= -->
+
+    <div class="seller-info">
+
+        <div class="seller-info-header">
+
+            <div class="profile-icon">
+                👤
+            </div>
+
+            <div>
+
+                <h2>
+                    Seller Information
+                </h2>
+
+                <div class="seller-info-subtitle">
+                    Your registered seller account information
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="info-grid">
+
+
+            <!-- FULL NAME -->
+
+            <div class="info-card">
+
+                <span class="info-label">
+                    Full Name
+                </span>
+
+                <span class="info-value"
+                      th:text="${seller.name}">
+
+                    Seller Name
+
+                </span>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="info-card">
+
+                <span class="info-label">
+                    Email
+                </span>
+
+                <span class="info-value"
+                      th:text="${seller.email}">
+
+                    Email
+
+                </span>
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="info-card">
+
+                <span class="info-label">
+                    Phone
+                </span>
+
+                <span class="info-value"
+                      th:text="${seller.phone}">
+
+                    Phone
+
+                </span>
+
+            </div>
+
+
+            <!-- BUSINESS -->
+
+            <div class="info-card">
+
+                <span class="info-label">
+                    Business Name
+                </span>
+
+                <span class="info-value"
+                      th:text="${seller.businessName}">
+
+                    Business
+
+                </span>
+
+            </div>
+
+
+            <!-- ADDRESS -->
+
+            <div class="info-card">
+
+                <span class="info-label">
+                    Address
+                </span>
+
+                <span class="info-value"
+                      th:text="${seller.address}">
+
+                    Address
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SELLER NOTICE -->
+
+        <div class="notice">
+
+            <strong>
+                🔍 Product Verification Notice
+            </strong>
+
+            <span>
+                Products submitted by sellers are reviewed by the
+                KhatiFarm admin before they become available in the
+                marketplace. Quality score, grade and approved price
+                are controlled during the verification process.
+            </span>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

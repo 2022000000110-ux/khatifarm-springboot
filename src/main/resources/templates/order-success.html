@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Order Confirmed | KhatiFarm</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f8f3;
+
+            color: #333;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+            background: #2e7d32;
+
+            color: white;
+
+            padding: 15px 6%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+        }
+
+
+        .logo {
+            font-size: 25px;
+
+            font-weight: bold;
+        }
+
+
+        .logo a {
+            color: white;
+
+            text-decoration: none;
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            gap: 20px;
+
+            align-items: center;
+        }
+
+
+        .nav-links a {
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .success-container {
+            max-width: 950px;
+
+            margin: 50px auto;
+
+            padding: 0 20px;
+        }
+
+
+        .success-box {
+            background: white;
+
+            padding: 45px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                    0 8px 30px rgba(0, 0, 0, 0.08);
+
+            text-align: center;
+        }
+
+
+        /* =====================================================
+           SUCCESS ICON
+        ===================================================== */
+
+        .success-icon {
+            width: 85px;
+
+            height: 85px;
+
+            margin: 0 auto 20px;
+
+            border-radius: 50%;
+
+            background: #e8f5e9;
+
+            border: 5px solid #c8e6c9;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 45px;
+
+            color: #2e7d32;
+
+            font-weight: bold;
+        }
+
+
+        /* =====================================================
+           HEADING
+        ===================================================== */
+
+        .success-box h1 {
+            color: #2e7d32;
+
+            margin: 0 0 10px;
+
+            font-size: 32px;
+        }
+
+
+        .success-message {
+            color: #666;
+
+            margin: 0 auto 30px;
+
+            max-width: 600px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           ORDER ID
+        ===================================================== */
+
+        .order-id {
+            background: #f1f8e9;
+
+            border: 1px solid #dcedc8;
+
+            padding: 16px;
+
+            border-radius: 10px;
+
+            margin-bottom: 28px;
+
+            color: #555;
+        }
+
+
+        .order-id strong {
+            color: #2e7d32;
+
+            font-size: 17px;
+        }
+
+
+        /* =====================================================
+           ORDER INFORMATION
+        ===================================================== */
+
+        .order-info {
+            text-align: left;
+
+            border-top: 1px solid #eeeeee;
+
+            padding-top: 20px;
+        }
+
+
+        .info-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 25px;
+
+            padding: 13px 0;
+
+            border-bottom: 1px solid #eeeeee;
+        }
+
+
+        .info-label {
+            font-weight: 700;
+
+            color: #37474f;
+        }
+
+
+        .info-value {
+            color: #546e7a;
+
+            text-align: right;
+
+            max-width: 60%;
+        }
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 14px;
+
+            border-radius: 20px;
+
+            background: #fff3cd;
+
+            color: #856404;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           ORDERED ITEMS
+        ===================================================== */
+
+        .items-title {
+            text-align: left;
+
+            margin-top: 32px;
+
+            margin-bottom: 15px;
+
+            color: #263238;
+
+            font-size: 21px;
+        }
+
+
+        .order-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 14px;
+
+            margin-bottom: 10px;
+
+            background: #fafafa;
+
+            border: 1px solid #eeeeee;
+
+            border-radius: 10px;
+
+            text-align: left;
+        }
+
+
+        .order-item img {
+            width: 70px;
+
+            height: 70px;
+
+            object-fit: cover;
+
+            border-radius: 9px;
+
+            background: #f1f5f1;
+        }
+
+
+        .item-info {
+            flex: 1;
+        }
+
+
+        .item-name {
+            font-weight: 800;
+
+            color: #263238;
+
+            margin-bottom: 6px;
+        }
+
+
+        .item-details {
+            color: #777;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+        }
+
+
+        .item-details strong {
+            color: #2e7d32;
+        }
+
+
+        .item-total {
+            font-weight: 800;
+
+            color: #2e7d32;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           SELLER / QUALITY BADGES
+        ===================================================== */
+
+        .item-badges {
+            margin-top: 7px;
+        }
+
+
+        .official-badge,
+        .seller-badge {
+            display: inline-block;
+
+            padding: 4px 8px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        .official-badge {
+            background: #e8f5e9;
+
+            color: #1b5e20;
+
+            border: 1px solid #a5d6a7;
+        }
+
+
+        .seller-badge {
+            background: #f5f5f5;
+
+            color: #555;
+
+            border: 1px solid #ddd;
+        }
+
+
+        /* =====================================================
+           TOTAL
+        ===================================================== */
+
+        .total-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-top: 22px;
+
+            padding: 20px 0;
+
+            border-top: 2px solid #eeeeee;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+            text-align: left;
+        }
+
+
+        .total-price {
+            color: #2e7d32;
+
+            font-size: 27px;
+        }
+
+
+        /* =====================================================
+           TRUST MESSAGE
+        ===================================================== */
+
+        .trust-message {
+            margin-top: 10px;
+
+            padding: 15px;
+
+            background: #f1f8e9;
+
+            border: 1px solid #dcedc8;
+
+            border-radius: 9px;
+
+            color: #558b2f;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+
+            text-align: left;
+        }
+
+
+        /* =====================================================
+           ACTION BUTTONS
+        ===================================================== */
+
+        .action-buttons {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 12px;
+
+            margin-top: 30px;
+        }
+
+
+        .action-btn {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 48px;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            text-align: center;
+        }
+
+
+        .products-btn {
+            background: #2e7d32;
+
+            color: white;
+        }
+
+
+        .products-btn:hover {
+            background: #1b5e20;
+        }
+
+
+        .track-btn {
+            background: #558b2f;
+
+            color: white;
+        }
+
+
+        .track-btn:hover {
+            background: #33691e;
+        }
+
+
+        .home-btn {
+            border: 2px solid #2e7d32;
+
+            color: #2e7d32;
+
+            background: white;
+        }
+
+
+        .home-btn:hover {
+            background: #2e7d32;
+
+            color: white;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+
+            .nav-links {
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+
+            .success-container {
+                margin: 30px auto;
+
+                padding: 0 15px;
+            }
+
+
+            .success-box {
+                padding: 25px 18px;
+            }
+
+
+            .success-box h1 {
+                font-size: 26px;
+            }
+
+
+            .info-row {
+                flex-direction: column;
+
+                gap: 5px;
+            }
+
+
+            .info-value {
+                max-width: 100%;
+
+                text-align: left;
+            }
+
+
+            .order-item {
+                align-items: flex-start;
+
+                flex-wrap: wrap;
+            }
+
+
+            .order-item img {
+                width: 60px;
+
+                height: 60px;
+            }
+
+
+            .item-total {
+                width: 100%;
+
+                padding-left: 75px;
+            }
+
+
+            .total-row {
+                font-size: 19px;
+            }
+
+
+            .total-price {
+                font-size: 23px;
+            }
+
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+
+    <div class="logo">
+
+        <a th:href="@{/}">
+
+            🌱 KhatiFarm
+
+        </a>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a th:href="@{/}">
+            Home
+        </a>
+
+
+        <a th:href="@{/products}">
+            Products
+        </a>
+
+
+        <a th:href="@{/cart}">
+            🛒 Cart
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     SUCCESS CONTAINER
+===================================================== -->
+
+<div class="success-container">
+
+
+    <div class="success-box">
+
+
+        <!-- =================================================
+             SUCCESS ICON
+        ================================================= -->
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+
+        <!-- =================================================
+             HEADING
+        ================================================= -->
+
+        <h1>
+            Order Placed Successfully!
+        </h1>
+
+
+        <p class="success-message">
+
+            Thank you for shopping with KhatiFarm.
+
+            <br>
+
+            Your order has been received successfully
+            and is now being processed.
+
+        </p>
+
+
+        <!-- =================================================
+             ORDER ID
+        ================================================= -->
+
+        <div class="order-id">
+
+            Order ID:
+
+            <strong th:text="${order.id}">
+
+                ORDER-ID
+
+            </strong>
+
+        </div>
+
+
+        <!-- =================================================
+             CUSTOMER INFORMATION
+        ================================================= -->
+
+        <div class="order-info">
+
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    Customer Name
+                </span>
+
+                <span class="info-value"
+                      th:text="${order.customerName}">
+
+                    Customer
+
+                </span>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    📱 Phone
+                </span>
+
+                <span class="info-value"
+                      th:text="${order.phone}">
+
+                    01XXXXXXXXX
+
+                </span>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    📍 Delivery Address
+                </span>
+
+                <span class="info-value"
+                      th:text="${order.address}">
+
+                    Dhaka
+
+                </span>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    💳 Payment Method
+                </span>
+
+                <span class="info-value"
+                      th:text="${order.paymentMethod}">
+
+                    Cash on Delivery
+
+                </span>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    Order Status
+                </span>
+
+                <span class="info-value">
+
+                    <span class="status"
+                          th:text="${order.status}">
+
+                        PENDING
+
+                    </span>
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ORDERED PRODUCTS
+        ================================================= -->
+
+        <h2 class="items-title">
+            Ordered Products
+        </h2>
+
+
+        <div th:each="item : ${order.items}"
+             class="order-item">
+
+
+            <!-- IMAGE -->
+
+            <img th:src="@{${item.imageUrl}}"
+                 th:alt="${item.productName}">
+
+
+            <!-- INFORMATION -->
+
+            <div class="item-info">
+
+
+                <div class="item-name"
+                     th:text="${item.productName}">
+
+                    Product Name
+
+                </div>
+
+
+                <div class="item-details">
+
+                    Quantity:
+
+                    <span th:text="${item.quantity}">
+                        1
+                    </span>
+
+                    ×
+
+                    ৳<span th:text="${item.price}">
+                        0
+                    </span>
+
+                    <br>
+
+                    Quality Score:
+
+                    <strong th:text="${item.qualityScore}">
+                        0
+                    </strong>
+
+                    /100
+
+                    &nbsp; | &nbsp;
+
+                    Grade:
+
+                    <strong th:text="${item.grade}">
+                        A
+                    </strong>
+
+                </div>
+
+
+                <!-- SELLER BADGE -->
+
+                <div class="item-badges">
+
+                    <span th:if="${item.sellerType == 'KHATIFARM'}"
+                          class="official-badge">
+
+                        ✓ Official KhatiFarm
+
+                    </span>
+
+
+                    <span th:if="${item.sellerType == 'SELLER'}"
+                          class="seller-badge">
+
+                        👨‍🌾 Local Seller
+
+                    </span>
+
+
+                    <span th:if="${item.sellerType == null}"
+                          class="seller-badge">
+
+                        👨‍🌾 Seller
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ITEM TOTAL -->
+
+            <div class="item-total">
+
+                ৳<span th:text="${item.subtotal}">
+                    0
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TOTAL
+        ================================================= -->
+
+        <div class="total-row">
+
+            <span>
+                Total
+            </span>
+
+            <span class="total-price">
+
+                ৳<span th:text="${order.total}">
+                    0
+                </span>
+
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             TRUST MESSAGE
+        ================================================= -->
+
+        <div class="trust-message">
+
+            ✓ Your order contains quality-verified products.
+
+            <br>
+
+            ✓ Product quality score and grade are preserved
+            with your order information.
+
+            <br>
+
+            ✓ You can use the tracking option below
+            to check your order status.
+
+        </div>
+
+
+        <!-- =================================================
+             ACTION BUTTONS
+        ================================================= -->
+
+        <div class="action-buttons">
+
+
+            <!-- CONTINUE SHOPPING -->
+
+            <a th:href="@{/products}"
+               class="action-btn products-btn">
+
+                🛍️ Continue Shopping
+
+            </a>
+
+
+            <!-- TRACK ORDER -->
+
+            <a th:href="@{/track-order}"
+               class="action-btn track-btn">
+
+                📦 Track My Order
+
+            </a>
+
+
+            <!-- HOME -->
+
+            <a th:href="@{/}"
+               class="action-btn home-btn">
+
+                🏠 Back to Home
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

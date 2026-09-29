@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | KhatiFarm</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <style>
+
+        /* =====================================================
+           CART PAGE
+        ===================================================== */
+
+        .cart-container {
+            max-width: 1150px;
+
+            margin: 50px auto;
+
+            padding: 0 25px;
+        }
+
+
+        .cart-title {
+            margin-bottom: 30px;
+        }
+
+
+        .cart-title h1 {
+            margin: 0 0 8px;
+
+            font-size: 34px;
+
+            color: #263238;
+        }
+
+
+        .cart-title p {
+            margin: 0;
+
+            color: #777;
+
+            font-size: 15px;
+        }
+
+
+        /* =====================================================
+           STOCK ERROR
+        ===================================================== */
+
+        .stock-error {
+            background: #fff3cd;
+
+            color: #856404;
+
+            padding: 15px 20px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            border: 1px solid #ffeeba;
+
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           CART ITEM
+        ===================================================== */
+
+        .cart-card {
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                    0 6px 25px rgba(0, 0, 0, 0.07);
+
+            margin-bottom: 16px;
+
+            border: 1px solid #eeeeee;
+        }
+
+
+        .cart-item {
+            display: grid;
+
+            grid-template-columns:
+                    110px
+                    1fr
+                    110px
+                    100px
+                    130px;
+
+            align-items: center;
+
+            gap: 22px;
+        }
+
+
+        /* =====================================================
+           IMAGE
+        ===================================================== */
+
+        .cart-image {
+            width: 100px;
+
+            height: 100px;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+
+            background: #f3f6f3;
+
+            display: block;
+        }
+
+
+        /* =====================================================
+           PRODUCT INFO
+        ===================================================== */
+
+        .product-name {
+            font-weight: 800;
+
+            font-size: 18px;
+
+            color: #263238;
+
+            margin-bottom: 8px;
+        }
+
+
+        .product-info {
+            color: #777;
+
+            font-size: 13px;
+
+            line-height: 1.8;
+        }
+
+
+        .product-info strong {
+            color: #2e7d32;
+        }
+
+
+        /* =====================================================
+           SELLER
+        ===================================================== */
+
+        .seller-info {
+            margin-top: 8px;
+        }
+
+
+        .official-badge {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            background: #e8f5e9;
+
+            color: #1b5e20;
+
+            border: 1px solid #a5d6a7;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .seller-badge {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            background: #f5f5f5;
+
+            color: #555;
+
+            border: 1px solid #ddd;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           PRICE
+        ===================================================== */
+
+        .price-label,
+        .quantity-label,
+        .subtotal-label {
+            display: block;
+
+            color: #999;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+        }
+
+
+        .price {
+            font-size: 17px;
+
+            font-weight: 800;
+
+            color: #37474f;
+        }
+
+
+        /* =====================================================
+           QUANTITY
+        ===================================================== */
+
+        .quantity {
+            text-align: center;
+        }
+
+
+        .quantity-number {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-width: 42px;
+
+            height: 36px;
+
+            padding: 0 10px;
+
+            background: #f1f8e9;
+
+            color: #2e7d32;
+
+            border-radius: 8px;
+
+            font-size: 17px;
+
+            font-weight: 800;
+        }
+
+
+        /* =====================================================
+           SUBTOTAL
+        ===================================================== */
+
+        .subtotal {
+            font-size: 18px;
+
+            font-weight: 800;
+
+            color: #2e7d32;
+
+            margin-bottom: 8px;
+        }
+
+
+        /* =====================================================
+           REMOVE
+        ===================================================== */
+
+        .remove-btn {
+            color: #c62828;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        .remove-btn:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =====================================================
+           TOTAL AREA
+        ===================================================== */
+
+        .total-section {
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                    0 6px 25px rgba(0, 0, 0, 0.07);
+
+            border: 1px solid #eeeeee;
+
+            text-align: right;
+
+            margin-top: 25px;
+        }
+
+
+        .total-label {
+            color: #777;
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .total {
+            font-size: 30px;
+
+            font-weight: 800;
+
+            color: #2e7d32;
+
+            margin-bottom: 22px;
+        }
+
+
+        .cart-actions {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 12px;
+        }
+
+
+        .checkout-btn,
+        .clear-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 46px;
+
+            padding: 0 22px;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-weight: 700;
+
+            transition:
+                    background 0.2s ease,
+                    transform 0.2s ease;
+        }
+
+
+        .checkout-btn {
+            background: #2e7d32;
+        }
+
+
+        .checkout-btn:hover {
+            background: #1b5e20;
+
+            transform: translateY(-2px);
+        }
+
+
+        .clear-btn {
+            background: #c62828;
+        }
+
+
+        .clear-btn:hover {
+            background: #a91f1f;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =====================================================
+           EMPTY CART
+        ===================================================== */
+
+        .empty-cart {
+            background: white;
+
+            padding: 70px 30px;
+
+            text-align: center;
+
+            border-radius: 16px;
+
+            box-shadow:
+                    0 6px 25px rgba(0, 0, 0, 0.07);
+
+            border: 1px solid #eeeeee;
+        }
+
+
+        .empty-cart-icon {
+            font-size: 55px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .empty-cart h2 {
+            margin: 0 0 10px;
+
+            color: #263238;
+
+            font-size: 27px;
+        }
+
+
+        .empty-cart p {
+            color: #777;
+
+            margin-bottom: 20px;
+        }
+
+
+        .shop-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 12px 22px;
+
+            background: #2e7d32;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-weight: 700;
+        }
+
+
+        .shop-btn:hover {
+            background: #1b5e20;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .cart-item {
+                grid-template-columns:
+                        90px
+                        1fr
+                        100px;
+
+                gap: 15px;
+            }
+
+
+            .price {
+                grid-column: 2;
+            }
+
+
+            .quantity {
+                grid-column: 3;
+
+                grid-row: 1;
+            }
+
+
+            .subtotal-area {
+                grid-column: 2;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .cart-container {
+                margin: 30px auto;
+
+                padding: 0 15px;
+            }
+
+
+            .cart-title h1 {
+                font-size: 28px;
+            }
+
+
+            .cart-card {
+                padding: 15px;
+            }
+
+
+            .cart-item {
+                display: grid;
+
+                grid-template-columns: 75px 1fr;
+
+                gap: 12px;
+            }
+
+
+            .cart-image {
+                width: 75px;
+
+                height: 75px;
+            }
+
+
+            .product-name {
+                font-size: 16px;
+            }
+
+
+            .price,
+            .quantity,
+            .subtotal-area {
+                grid-column: 2;
+
+                text-align: left;
+            }
+
+
+            .quantity {
+                text-align: left;
+            }
+
+
+            .total-section {
+                text-align: center;
+
+                padding: 22px 15px;
+            }
+
+
+            .cart-actions {
+                flex-direction: column;
+            }
+
+
+            .checkout-btn,
+            .clear-btn {
+                width: 100%;
+
+                box-sizing: border-box;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <a th:href="@{/}"
+           style="text-decoration:none; color:inherit;">
+
+            🌱 KhatiFarm
+
+        </a>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a th:href="@{/}">
+            Home
+        </a>
+
+        <a th:href="@{/products}">
+            Products
+        </a>
+
+        <a th:href="@{/cart}">
+            🛒 Cart
+        </a>
+
+        <a th:href="@{/customer/login}">
+            Customer Login
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     CART CONTAINER
+===================================================== -->
+
+<div class="cart-container">
+
+
+    <!-- PAGE TITLE -->
+
+    <div class="cart-title">
+
+        <h1>
+            🛒 Shopping Cart
+        </h1>
+
+        <p>
+            Review your quality-verified products before checkout.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         STOCK ERROR
+    ================================================= -->
+
+    <div th:if="${param.error != null
+                 and param.error[0] == 'stock'}"
+         class="stock-error">
+
+        ⚠️ Sorry! The requested quantity is not available
+        in stock.
+
+    </div>
+
+
+    <!-- =================================================
+         CART HAS ITEMS
+    ================================================= -->
+
+    <div th:if="${not #lists.isEmpty(cart)}">
+
+
+        <!-- =================================================
+             CART ITEM
+        ================================================= -->
+
+        <div class="cart-card"
+             th:each="item : ${cart}">
+
+            <div class="cart-item">
+
+
+                <!-- PRODUCT IMAGE -->
+
+                <img class="cart-image"
+                     th:src="@{${item.imageUrl}}"
+                     th:alt="${item.productName}">
+
+
+                <!-- PRODUCT INFORMATION -->
+
+                <div>
+
+                    <div class="product-name"
+                         th:text="${item.productName}">
+
+                        Product
+
+                    </div>
+
+
+                    <div class="product-info">
+
+                        Quality:
+
+                        <strong th:text="${item.qualityScore}">
+                            0
+                        </strong>/100
+
+                        &nbsp; | &nbsp;
+
+                        Grade:
+
+                        <strong th:text="${item.grade}">
+                            A+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SELLER -->
+
+                    <div class="seller-info">
+
+
+                        <!-- KHATIFARM -->
+
+                        <span th:if="${item.sellerType == 'KHATIFARM'}"
+                              class="official-badge">
+
+                            ✓ Official KhatiFarm
+
+                        </span>
+
+
+                        <!-- LOCAL SELLER -->
+
+                        <span th:if="${item.sellerType == 'SELLER'}"
+                              class="seller-badge">
+
+                            👨‍🌾 Local Seller
+
+                        </span>
+
+
+                        <!-- LEGACY -->
+
+                        <span th:if="${item.sellerType == null}"
+                              class="seller-badge">
+
+                            👨‍🌾 Seller
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="price">
+
+                    <span class="price-label">
+                        Unit Price
+                    </span>
+
+                    ৳<span th:text="${item.price}">
+                        0
+                    </span>
+
+                </div>
+
+
+                <!-- QUANTITY -->
+
+                <div class="quantity">
+
+                    <span class="quantity-label">
+                        Quantity
+                    </span>
+
+                    <span class="quantity-number"
+                          th:text="${item.quantity}">
+
+                        1
+
+                    </span>
+
+                </div>
+
+
+                <!-- SUBTOTAL + REMOVE -->
+
+                <div class="subtotal-area">
+
+                    <span class="subtotal-label">
+                        Subtotal
+                    </span>
+
+                    <div class="subtotal">
+
+                        ৳<span th:text="${item.subtotal}">
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <a class="remove-btn"
+                       th:href="@{/cart/remove/{id}(id=${item.productId})}">
+
+                        🗑 Remove
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TOTAL SECTION
+        ================================================= -->
+
+        <div class="total-section">
+
+
+            <div class="total-label">
+                Order Total
+            </div>
+
+
+            <div class="total">
+
+                ৳<span th:text="${total}">
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="cart-actions">
+
+
+                <!-- CLEAR CART -->
+
+                <a th:href="@{/cart/clear}"
+                   class="clear-btn">
+
+                    🗑 Clear Cart
+
+                </a>
+
+
+                <!-- CHECKOUT -->
+
+                <a th:href="@{/checkout}"
+                   class="checkout-btn">
+
+                    Proceed to Checkout →
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         EMPTY CART
+    ================================================= -->
+
+    <div class="empty-cart"
+         th:if="${#lists.isEmpty(cart)}">
+
+
+        <div class="empty-cart-icon">
+            🛒
+        </div>
+
+
+        <h2>
+            Your cart is empty
+        </h2>
+
+
+        <p>
+            Browse our quality-verified organic products
+            and add something to your cart.
+        </p>
+
+
+        <a th:href="@{/products}"
+           class="shop-btn">
+
+            Browse Products →
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

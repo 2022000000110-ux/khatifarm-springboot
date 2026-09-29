@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Review Product | KhatiFarm</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f7f4;
+            font-family: Arial, sans-serif;
+            color: #263238;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            min-height: 70px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #37474f;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #2e7d32;
+        }
+
+
+        /* ================= PAGE ================= */
+
+        .review-container {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 45px 20px 60px;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            color: #1b5e20;
+            font-size: 30px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+
+        /* ================= MAIN CARD ================= */
+
+        .review-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+        }
+
+
+        /* ================= STATUS ================= */
+
+        .status-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 18px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            border-left: 5px solid #f9a825;
+            color: #5d4037;
+        }
+
+        .status-icon {
+            font-size: 23px;
+        }
+
+        .status-banner strong {
+            color: #4e342e;
+        }
+
+
+        /* ================= PRODUCT SECTION ================= */
+
+        .section-title {
+            margin: 0 0 20px;
+            font-size: 19px;
+            color: #263238;
+        }
+
+        .product-preview {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 35px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+
+        /* ================= IMAGE ================= */
+
+        .product-image-wrapper {
+            width: 100%;
+            height: 330px;
+            background: #f8faf8;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        .product-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+
+        /* ================= PRODUCT INFO ================= */
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 13px 15px;
+            background: #f8faf8;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            color: #263238;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .seller-value {
+            color: #2e7d32;
+        }
+
+        .price-value {
+            color: #1b5e20;
+            font-size: 16px;
+        }
+
+
+        /* ================= STATUS BADGE ================= */
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 11px;
+            border-radius: 20px;
+            background: #fff3cd;
+            color: #856404;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+
+        /* ================= VERIFICATION ================= */
+
+        .verification-section {
+            margin-top: 30px;
+        }
+
+        .verification-header {
+            margin-bottom: 22px;
+        }
+
+        .verification-header h2 {
+            margin: 0 0 7px;
+            font-size: 21px;
+            color: #263238;
+        }
+
+        .verification-header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+
+        /* ================= FORM ================= */
+
+        .review-form {
+            background: #f8faf8;
+            border: 1px solid #e2e8e2;
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #37474f;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .form-help {
+            margin-top: 6px;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #263238;
+            font-size: 15px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.10);
+        }
+
+
+        /* ================= THREE COLUMNS ================= */
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+        }
+
+
+        /* ================= QUALITY GUIDE ================= */
+
+        .quality-guide {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .quality-box {
+            padding: 14px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 9px;
+        }
+
+        .quality-grade {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .quality-description {
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .premium {
+            color: #2e7d32;
+        }
+
+        .high {
+            color: #558b2f;
+        }
+
+        .standard {
+            color: #ef6c00;
+        }
+
+
+        /* ================= BUTTONS ================= */
+
+        .approve-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 10px;
+            background: #2e7d32;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .approve-btn:hover {
+            background: #1b5e20;
+            transform: translateY(-1px);
+        }
+
+        .reject-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #c62828;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .reject-btn:hover {
+            background: #8e0000;
+            transform: translateY(-1px);
+        }
+
+
+        /* ================= PROCESS ================= */
+
+        .process-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8faf8;
+            border: 1px solid #e2e8e2;
+            border-radius: 12px;
+        }
+
+        .process-section h3 {
+            margin: 0 0 15px;
+            font-size: 15px;
+            color: #37474f;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .process-step {
+            padding: 13px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #eeeeee;
+            text-align: center;
+        }
+
+        .process-step-icon {
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        .process-step-text {
+            font-size: 12px;
+            font-weight: 700;
+            color: #37474f;
+        }
+
+
+        /* ================= BACK ================= */
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: #2e7d32;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 800px) {
+
+            .product-preview {
+                grid-template-columns: 1fr;
+            }
+
+            .product-image-wrapper {
+                height: 300px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .quality-guide {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .review-container {
+                padding: 25px 14px 40px;
+            }
+
+            .review-card {
+                padding: 20px 16px;
+                border-radius: 14px;
+            }
+
+            .page-header h1 {
+                font-size: 25px;
+            }
+
+            .product-image-wrapper {
+                height: 240px;
+            }
+
+            .info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .info-value {
+                text-align: left;
+            }
+
+            .review-form {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🌱 KhatiFarm Admin
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/admin/dashboard">
+            Dashboard
+        </a>
+
+        <a href="/admin/logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================= PAGE ================= -->
+
+<div class="review-container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <h1>
+            🔍 Product Verification
+        </h1>
+
+        <p>
+            Review seller-submitted products before publishing them
+            on the KhatiFarm marketplace.
+        </p>
+
+    </div>
+
+
+
+    <div class="review-card">
+
+
+        <!-- STATUS -->
+
+        <div class="status-banner">
+
+            <div class="status-icon">
+                ⏳
+            </div>
+
+            <div>
+
+                <strong>
+                    Product Awaiting Verification
+                </strong>
+
+                <br>
+
+                Review the product information and assign its
+                quality score, grade and approved selling price.
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PRODUCT INFORMATION -->
+
+        <h2 class="section-title">
+            📦 Submitted Product Information
+        </h2>
+
+
+        <div class="product-preview">
+
+
+            <!-- IMAGE -->
+
+            <div class="product-image-wrapper">
+
+                <img th:src="${product.imageUrl}"
+                     th:alt="${product.name}">
+
+            </div>
+
+
+
+            <!-- INFORMATION -->
+
+            <div class="product-info">
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Product Name
+                    </span>
+
+                    <span class="info-value"
+                          th:text="${product.name}">
+                        Product
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Category
+                    </span>
+
+                    <span class="info-value"
+                          th:text="${product.category}">
+                        Category
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Seller
+                    </span>
+
+                    <span class="info-value seller-value"
+                          th:text="${product.sellerName}">
+                        Seller
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Origin / Location
+                    </span>
+
+                    <span class="info-value"
+                          th:text="${product.origin}">
+                        Origin
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Seller Submitted Price
+                    </span>
+
+                    <span class="info-value price-value">
+
+                        ৳<span th:text="${product.price}">
+                            0
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Available Stock
+                    </span>
+
+                    <span class="info-value"
+                          th:text="${product.stock}">
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Current Status
+                    </span>
+
+                    <span class="info-value">
+
+                        <span class="status-badge"
+                              th:text="${product.status}">
+                            PENDING
+                        </span>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= VERIFICATION ================= -->
+
+        <div class="verification-section">
+
+
+            <div class="verification-header">
+
+                <h2>
+                    ⭐ Quality & Price Verification
+                </h2>
+
+                <p>
+                    Assign a quality score and grade based on your
+                    verification. Then set the final approved price
+                    that customers will see on the marketplace.
+                </p>
+
+            </div>
+
+
+
+            <!-- APPROVE FORM -->
+
+            <div class="review-form">
+
+                <form
+                        th:action="@{/admin/products/approve/{id}(id=${product.id})}"
+                        method="post">
+
+
+                    <div class="form-row">
+
+
+                        <!-- QUALITY SCORE -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Quality Score
+                            </label>
+
+                            <input type="number"
+                                   name="qualityScore"
+                                   min="0"
+                                   max="100"
+                                   value="0"
+                                   required>
+
+                            <div class="form-help">
+                                Enter a score between 0 and 100.
+                            </div>
+
+                        </div>
+
+
+                        <!-- GRADE -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Quality Grade
+                            </label>
+
+                            <select name="grade"
+                                    required>
+
+                                <option value="A+">
+                                    A+ - Premium Quality
+                                </option>
+
+                                <option value="A">
+                                    A - High Quality
+                                </option>
+
+                                <option value="B">
+                                    B - Standard Quality
+                                </option>
+
+                            </select>
+
+                            <div class="form-help">
+                                Select the verified product grade.
+                            </div>
+
+                        </div>
+
+
+                        <!-- PRICE -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Approved Price (BDT)
+                            </label>
+
+                            <input type="number"
+                                   name="approvedPrice"
+                                   step="0.01"
+                                   min="0"
+                                   th:value="${product.price}"
+                                   required>
+
+                            <div class="form-help">
+                                Final marketplace selling price.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- QUALITY GUIDE -->
+
+                    <div class="quality-guide">
+
+
+                        <div class="quality-box">
+
+                            <div class="quality-grade premium">
+                                A+
+                            </div>
+
+                            <div class="quality-description">
+                                Premium quality product with
+                                excellent verified standards.
+                            </div>
+
+                        </div>
+
+
+                        <div class="quality-box">
+
+                            <div class="quality-grade high">
+                                A
+                            </div>
+
+                            <div class="quality-description">
+                                High quality product meeting
+                                strong marketplace standards.
+                            </div>
+
+                        </div>
+
+
+                        <div class="quality-box">
+
+                            <div class="quality-grade standard">
+                                B
+                            </div>
+
+                            <div class="quality-description">
+                                Standard quality product suitable
+                                for regular marketplace sale.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- APPROVE -->
+
+                    <button type="submit"
+                            class="approve-btn">
+
+                        ✅ Approve & Publish Product
+
+                    </button>
+
+                </form>
+
+
+
+                <!-- REJECT -->
+
+                <form
+                        th:action="@{/admin/products/reject/{id}(id=${product.id})}"
+                        method="post">
+
+                    <button type="submit"
+                            class="reject-btn"
+                            onclick="return confirm('Are you sure you want to reject this product?');">
+
+                        ❌ Reject Product
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= PROCESS ================= -->
+
+        <div class="process-section">
+
+            <h3>
+                🔄 Verification Workflow
+            </h3>
+
+            <div class="process-steps">
+
+
+                <div class="process-step">
+
+                    <div class="process-step-icon">
+                        📦
+                    </div>
+
+                    <div class="process-step-text">
+                        Seller Submission
+                    </div>
+
+                </div>
+
+
+                <div class="process-step">
+
+                    <div class="process-step-icon">
+                        🔍
+                    </div>
+
+                    <div class="process-step-text">
+                        Admin Verification
+                    </div>
+
+                </div>
+
+
+                <div class="process-step">
+
+                    <div class="process-step-icon">
+                        🏆
+                    </div>
+
+                    <div class="process-step-text">
+                        Quality + Price Approval
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- BACK -->
+
+        <a href="/admin/dashboard"
+           class="back-btn">
+
+            ← Back to Admin Dashboard
+
+        </a>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

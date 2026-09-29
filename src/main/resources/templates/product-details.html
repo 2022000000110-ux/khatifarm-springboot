@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${product.name + ' | KhatiFarm'}">
+        Product Details | KhatiFarm
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #263238;
+            background: #f5f8f4;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 66px;
+            background: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 6%;
+
+            box-shadow:
+                    0 2px 12px rgba(0,0,0,.07);
+
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .brand {
+            text-decoration: none;
+            color: #263238;
+
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .brand span {
+            color: #2e7d32;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #263238;
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #2e7d32;
+        }
+
+        /* ================= PAGE ================= */
+
+        .page {
+            max-width: 1180px;
+
+            margin: 45px auto 80px;
+
+            padding: 0 20px;
+        }
+
+        /* ================= PRODUCT HERO ================= */
+
+        .product-hero {
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 32px;
+
+            display: grid;
+
+            grid-template-columns:
+                .95fr 1.05fr;
+
+            gap: 45px;
+
+            box-shadow:
+                    0 15px 40px rgba(0,0,0,.07);
+        }
+
+        /* ================= IMAGE ================= */
+
+        .image-box {
+
+            background: #f1f6f1;
+
+            border-radius: 18px;
+
+            min-height: 500px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+        .image-box img {
+
+            width: 100%;
+
+            height: 500px;
+
+            object-fit: contain;
+        }
+
+        /* ================= CATEGORY ================= */
+
+        .category {
+
+            display: inline-block;
+
+            padding: 7px 13px;
+
+            background: #edf7ed;
+
+            color: #2e7d32;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            margin-bottom: 12px;
+        }
+
+        h1 {
+
+            font-size: 42px;
+
+            line-height: 1.1;
+
+            margin:
+                    0 0 15px;
+        }
+
+        /* ================= SELLER BADGES ================= */
+
+        .official,
+        .seller-badge {
+
+            display: inline-flex;
+
+            padding: 8px 13px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+        }
+
+        .official {
+
+            background: #e8f5e9;
+
+            color: #2e7d32;
+        }
+
+        .seller-badge {
+
+            background: #eef4f7;
+
+            color: #546e7a;
+        }
+
+        /* ================= PRICE ================= */
+
+        .price {
+
+            font-size: 34px;
+
+            font-weight: 900;
+
+            color: #2e7d32;
+
+            margin:
+                    8px 0 22px;
+        }
+
+        /* ================= QUALITY ================= */
+
+        .quality-box {
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #f0faef,
+                            #e8f5e9
+                    );
+
+            border:
+                    1px solid #c8e6c9;
+
+            border-radius: 15px;
+
+            padding: 18px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .quality-label {
+
+            color: #4e6a52;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+        .score {
+
+            margin-top: 8px;
+
+            font-size: 22px;
+
+            font-weight: 900;
+
+            color: #2e7d32;
+        }
+
+        .grade {
+
+            background: #2e7d32;
+
+            color: white;
+
+            border-radius: 12px;
+
+            padding: 12px 17px;
+
+            font-size: 21px;
+
+            font-weight: 900;
+        }
+
+        /* ================= INFO ================= */
+
+        .info-list {
+
+            border-top:
+                    1px solid #eee;
+
+            margin-top: 12px;
+        }
+
+        .info-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 13px 0;
+
+            border-bottom:
+                    1px solid #eee;
+
+            font-size: 14px;
+        }
+
+        .info-row strong {
+            color: #263238;
+        }
+
+        .info-row span {
+
+            color: #607d8b;
+
+            text-align: right;
+        }
+
+        .stock-ok {
+
+            color: #2e7d32 !important;
+
+            font-weight: 800;
+        }
+
+        .stock-out {
+
+            color: #c62828 !important;
+
+            font-weight: 800;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .purchase-actions {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 12px;
+
+            margin-top: 24px;
+        }
+
+        .purchase-btn {
+
+            min-height: 52px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            font-weight: 800;
+
+            color: white;
+
+            transition: .2s;
+        }
+
+        .purchase-btn:hover {
+
+            transform:
+                    translateY(-2px);
+        }
+
+        .cart-btn {
+
+            background: #2e7d32;
+        }
+
+        .buy-btn {
+
+            background: #f59e0b;
+        }
+
+        /* ================= WHATSAPP ================= */
+
+        .whatsapp-btn {
+
+            min-height: 52px;
+
+            margin-top: 12px;
+
+            width: 100%;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            background: #25d366;
+
+            color: white;
+
+            font-weight: 800;
+
+            font-size: 15px;
+
+            cursor: pointer;
+        }
+
+        .whatsapp-btn:hover {
+
+            background: #1ebe5d;
+        }
+
+        .disabled {
+
+            background: #eceff1;
+
+            color: #78909c;
+
+            cursor: not-allowed;
+        }
+
+        .back {
+
+            display: block;
+
+            margin-top: 14px;
+
+            text-align: center;
+
+            color: #2e7d32;
+
+            text-decoration: none;
+
+            font-weight: 700;
+        }
+
+        /* ================= DETAILS ================= */
+
+        .detail-section {
+
+            margin-top: 32px;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            box-shadow:
+                    0 8px 25px rgba(0,0,0,.05);
+        }
+
+        .kicker {
+
+            color: #2e7d32;
+
+            font-size: 11px;
+
+            letter-spacing: 1.6px;
+
+            font-weight: 900;
+        }
+
+        .detail-section h2 {
+
+            margin:
+                    7px 0 15px;
+
+            font-size: 27px;
+        }
+
+        .description {
+
+            color: #5d6961;
+
+            line-height: 1.9;
+
+            white-space: pre-line;
+        }
+
+        /* ================= BENEFITS ================= */
+
+        .benefit-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap: 14px;
+        }
+
+        .benefit {
+
+            border:
+                    1px solid #e5ece5;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            background: #fbfdfb;
+        }
+
+        .benefit h3 {
+
+            margin:
+                    0 0 7px;
+
+            font-size: 16px;
+        }
+
+        .benefit p {
+
+            margin: 0;
+
+            color: #68756c;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+        }
+
+        .benefit-icon {
+
+            font-size: 24px;
+
+            margin-bottom: 8px;
+        }
+
+        /* ================= VERIFICATION ================= */
+
+        .verified-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 14px;
+        }
+
+        .verify-card {
+
+            background: #f7faf7;
+
+            border:
+                    1px solid #e5ece5;
+
+            padding: 18px;
+
+            border-radius: 13px;
+        }
+
+        .verify-card strong {
+
+            display: block;
+
+            margin-bottom: 6px;
+        }
+
+        .verify-card span {
+
+            color: #748078;
+
+            font-size: 13px;
+        }
+
+        .empty-description {
+
+            color: #78909c;
+
+            font-style: italic;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 850px) {
+
+            .product-hero {
+
+                grid-template-columns: 1fr;
+            }
+
+            .image-box,
+            .image-box img {
+
+                min-height: 330px;
+
+                height: 330px;
+            }
+
+            h1 {
+
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+
+                padding: 0 20px;
+            }
+
+            .nav-links {
+
+                gap: 12px;
+            }
+
+            .nav-links a:nth-child(3) {
+
+                display: none;
+            }
+
+            .product-hero {
+
+                padding: 18px;
+
+                gap: 25px;
+            }
+
+            .purchase-actions {
+
+                grid-template-columns: 1fr;
+            }
+
+            .benefit-grid,
+            .verified-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .detail-section {
+
+                padding: 22px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <a th:href="@{/}"
+       class="brand">
+
+        🌱 <span>KhatiFarm</span>
+
+    </a>
+
+    <nav class="nav-links">
+
+        <a th:href="@{/}">
+            Home
+        </a>
+
+        <a th:href="@{/products}">
+            Products
+        </a>
+
+        <a th:href="@{/cart}">
+            🛒 Cart
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="page">
+
+
+    <!-- ================= PRODUCT HERO ================= -->
+
+    <section class="product-hero">
+
+
+        <!-- PRODUCT IMAGE -->
+
+        <div class="image-box">
+
+            <img th:src="${product.imageUrl}"
+                 th:alt="${product.name}">
+
+        </div>
+
+
+        <!-- PRODUCT INFORMATION -->
+
+        <div>
+
+
+            <!-- CATEGORY -->
+
+            <span class="category"
+                  th:text="${product.category}">
+
+                Category
+
+            </span>
+
+
+            <!-- PRODUCT NAME -->
+
+            <h1 th:text="${product.name}">
+
+                Product Name
+
+            </h1>
+
+
+            <!-- KHATIFARM BADGE -->
+
+            <span th:if="${product.sellerType == 'KHATIFARM'}"
+                  class="official">
+
+                ✓ Official KhatiFarm Product
+
+            </span>
+
+
+            <!-- SELLER BADGE -->
+
+            <span th:if="${product.sellerType == 'SELLER'}"
+                  class="seller-badge">
+
+                👨‍🌾 Verified Local Seller
+
+            </span>
+
+
+            <!-- OLD PRODUCT -->
+
+            <span th:if="${product.sellerType == null}"
+                  class="seller-badge">
+
+                👨‍🌾 Marketplace Product
+
+            </span>
+
+
+            <!-- PRICE -->
+
+            <div class="price">
+
+                ৳<span th:text="${product.price}">
+                    0
+                </span>
+
+            </div>
+
+
+            <!-- QUALITY -->
+
+            <div class="quality-box">
+
+                <div>
+
+                    <div class="quality-label">
+
+                        VERIFIED QUALITY SCORE
+
+                    </div>
+
+                    <div class="score">
+
+                        ⭐
+
+                        <span th:text="${product.qualityScore}">
+                            0
+                        </span>
+
+                        /100
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="quality-label">
+
+                        QUALITY GRADE
+
+                    </div>
+
+                    <div class="grade"
+                         th:text="${product.grade}">
+
+                        A+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFO -->
+
+            <div class="info-list">
+
+
+                <div class="info-row">
+
+                    <strong>
+                        Seller
+                    </strong>
+
+                    <span th:text="${product.sellerName}">
+                        KhatiFarm
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <strong>
+                        📍 Origin
+                    </strong>
+
+                    <span th:text="${product.origin}">
+                        Bangladesh
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <strong>
+                        📦 Stock
+                    </strong>
+
+                    <span th:if="${product.stock > 0}"
+                          class="stock-ok">
+
+                        <span th:text="${product.stock}">
+                            0
+                        </span>
+
+                        units available
+
+                    </span>
+
+                    <span th:if="${product.stock <= 0}"
+                          class="stock-out">
+
+                        Out of Stock
+
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <strong>
+                        Status
+                    </strong>
+
+                    <span th:text="${product.status}">
+                        APPROVED
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PURCHASE BUTTONS -->
+
+            <div class="purchase-actions">
+
+
+                <!-- ADD TO CART -->
+
+                <a th:if="${product.stock > 0}"
+                   th:href="@{/cart/add/{id}(id=${product.id})}"
+                   class="purchase-btn cart-btn">
+
+                    🛒 Add to Cart
+
+                </a>
+
+
+                <!-- BUY NOW -->
+
+                <a th:if="${product.stock > 0}"
+                   th:href="@{/cart/add/{id}(id=${product.id},buyNow=true)}"
+                   class="purchase-btn buy-btn">
+
+                    ⚡ Buy Now
+
+                </a>
+
+
+                <!-- OUT OF STOCK -->
+
+                <div th:if="${product.stock <= 0}"
+                     class="purchase-btn disabled">
+
+                    ❌ Out of Stock
+
+                </div>
+
+            </div>
+
+
+            <!-- WHATSAPP -->
+
+            <button th:if="${product.stock > 0}"
+                    type="button"
+                    class="whatsapp-btn"
+                    th:attr="data-product-name=${product.name}"
+                    onclick="orderOnWhatsApp(this)">
+
+                💬 Order via WhatsApp
+
+            </button>
+
+
+            <!-- BACK -->
+
+            <a th:href="@{/products}"
+               class="back">
+
+                ← Back to Products
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= DESCRIPTION ================= -->
+
+    <section class="detail-section">
+
+        <span class="kicker">
+
+            ABOUT THIS PRODUCT
+
+        </span>
+
+        <h2>
+
+            Product Description
+
+        </h2>
+
+
+        <p class="description"
+           th:if="${product.description != null and !#strings.isEmpty(product.description)}"
+           th:text="${product.description}">
+
+            Product description.
+
+        </p>
+
+
+        <p class="empty-description"
+           th:if="${product.description == null or #strings.isEmpty(product.description)}">
+
+            Product description will be updated by KhatiFarm.
+
+        </p>
+
+    </section>
+
+
+    <!-- ================= BENEFITS ================= -->
+
+    <section class="detail-section">
+
+        <span class="kicker">
+
+            BENEFITS & USES
+
+        </span>
+
+        <h2>
+
+            Why Choose This Product?
+
+        </h2>
+
+
+        <div class="benefit-grid">
+
+
+            <div class="benefit">
+
+                <div class="benefit-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Quality Verified
+                </h3>
+
+                <p>
+                    Product quality is represented through
+                    the KhatiFarm quality score and grade.
+                </p>
+
+            </div>
+
+
+            <div class="benefit">
+
+                <div class="benefit-icon">
+                    📍
+                </div>
+
+                <h3>
+                    Known Origin
+                </h3>
+
+                <p>
+                    The product origin is displayed clearly
+                    for better marketplace transparency.
+                </p>
+
+            </div>
+
+
+            <div class="benefit">
+
+                <div class="benefit-icon">
+                    🛡️
+                </div>
+
+                <h3>
+                    Approved Marketplace Product
+                </h3>
+
+                <p>
+                    Only approved products are shown to
+                    customers in the marketplace.
+                </p>
+
+            </div>
+
+
+            <div class="benefit">
+
+                <div class="benefit-icon">
+                    🌿
+                </div>
+
+                <h3>
+                    Product Benefits
+                </h3>
+
+
+                <p th:if="${product.benefits != null and !#strings.isEmpty(product.benefits)}"
+                   th:text="${product.benefits}">
+
+                    Product benefits.
+
+                </p>
+
+
+                <p th:if="${product.benefits == null or #strings.isEmpty(product.benefits)}">
+
+                    Product-specific benefits will be added by
+                    the seller or KhatiFarm.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= VERIFICATION ================= -->
+
+    <section class="detail-section">
+
+        <span class="kicker">
+
+            KHATIFARM VERIFICATION
+
+        </span>
+
+        <h2>
+
+            What You Can Check
+
+        </h2>
+
+
+        <div class="verified-grid">
+
+
+            <div class="verify-card">
+
+                <strong>
+                    ⭐ Quality Score
+                </strong>
+
+                <span>
+
+                    <span th:text="${product.qualityScore}">
+                        0
+                    </span>
+
+                    out of 100
+
+                </span>
+
+            </div>
+
+
+            <div class="verify-card">
+
+                <strong>
+                    🏷️ Quality Grade
+                </strong>
+
+                <span th:text="${product.grade}">
+                    A+
+                </span>
+
+            </div>
+
+
+            <div class="verify-card">
+
+                <strong>
+                    📦 Product Status
+                </strong>
+
+                <span th:text="${product.status}">
+                    APPROVED
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================= WHATSAPP SCRIPT ================= -->
+
+<script>
+
+    function orderOnWhatsApp(button) {
+
+        const productName =
+            button.getAttribute("data-product-name");
+
+        const message =
+            "Hello KhatiFarm,%0A%0A" +
+            "I want to order: " +
+            encodeURIComponent(productName) +
+            "%0A%0APlease provide order details.";
+
+        const url =
+            "https://wa.me/8801602040298?text="
+            + message;
+
+        window.open(
+            url,
+            "_blank"
+        );
+    }
+
+</script>
+
+</body>
+
+</html>

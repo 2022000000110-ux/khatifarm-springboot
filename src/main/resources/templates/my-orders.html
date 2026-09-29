@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders - KhatiFarm</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8f3;
+            color: #222;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #176b2c;
+            color: white;
+            padding: 16px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+        }
+
+        .logo span {
+            color: #dff5df;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 12px;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.14);
+        }
+
+        .logout {
+            background: white !important;
+            color: #176b2c !important;
+            font-weight: bold;
+        }
+
+        .logout:hover {
+            background: #f1f8f1 !important;
+        }
+
+
+        /* ================= CONTAINER ================= */
+
+        .container {
+            width: 1100px;
+            max-width: 92%;
+            margin: 45px auto 70px;
+        }
+
+
+        /* ================= PAGE HEADER ================= */
+
+        .page-header {
+            background: linear-gradient(
+                    135deg,
+                    #eaf7ea,
+                    #ffffff
+            );
+
+            border: 1px solid #dcebdc;
+            border-radius: 18px;
+            padding: 28px 30px;
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            color: #176b2c;
+            font-size: 32px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #667066;
+            font-size: 15px;
+        }
+
+        .customer-email {
+            color: #176b2c;
+            font-weight: bold;
+        }
+
+
+        /* ================= ORDER COUNT ================= */
+
+        .order-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            background: white;
+            border: 1px solid #dcebdc;
+            color: #176b2c;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        /* ================= EMPTY STATE ================= */
+
+        .empty {
+            background: white;
+            padding: 65px 30px;
+            text-align: center;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.07);
+            border: 1px solid #e6eee6;
+        }
+
+        .empty-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #eaf7ea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 34px;
+        }
+
+        .empty h2 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+
+        .empty p {
+            margin: 0;
+            color: #777;
+        }
+
+        .shop-btn {
+            display: inline-block;
+            margin-top: 24px;
+            background: #176b2c;
+            color: white;
+            text-decoration: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.2s ease;
+        }
+
+        .shop-btn:hover {
+            background: #125724;
+            transform: translateY(-1px);
+        }
+
+
+        /* ================= ORDER CARD ================= */
+
+        .order-card {
+            background: white;
+            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 17px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border: 1px solid #e5ece5;
+            transition: 0.2s ease;
+        }
+
+        .order-card:hover {
+            box-shadow: 0 9px 28px rgba(0,0,0,0.09);
+            transform: translateY(-2px);
+        }
+
+
+        /* ================= ORDER HEADER ================= */
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #edf0ed;
+            padding-bottom: 18px;
+            margin-bottom: 20px;
+        }
+
+        .order-id-label {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .order-id {
+            font-weight: bold;
+            color: #222;
+            font-size: 15px;
+            word-break: break-all;
+        }
+
+        .status {
+            padding: 7px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #fff4d6;
+            color: #8a6500;
+            border: 1px solid #f1dfaa;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+
+        /* ================= ORDER INFO ================= */
+
+        .order-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .info-box {
+            background: #f8faf8;
+            border: 1px solid #edf2ed;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .info-box strong {
+            display: block;
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .info-box span {
+            color: #222;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .amount {
+            color: #176b2c !important;
+            font-size: 17px !important;
+        }
+
+
+        /* ================= ORDER FOOTER ================= */
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding-top: 3px;
+        }
+
+        .order-note {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .view-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: #176b2c;
+            color: white;
+            text-decoration: none;
+            padding: 10px 17px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .view-btn:hover {
+            background: #125724;
+            transform: translateY(-1px);
+        }
+
+
+        /* ================= TRUST SECTION ================= */
+
+        .trust-section {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .trust-box {
+            background: white;
+            border: 1px solid #e5ece5;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .trust-icon {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .trust-box strong {
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .trust-box span {
+            color: #777;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .page-header h1 {
+                font-size: 27px;
+            }
+
+            .order-info {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-section {
+                grid-template-columns: 1fr;
+            }
+
+            .order-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .view-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+
+        @media (max-width: 500px) {
+
+            .container {
+                max-width: 94%;
+                margin-top: 25px;
+            }
+
+            .page-header {
+                padding: 22px;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .order-card {
+                padding: 18px;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .status {
+                align-self: flex-start;
+            }
+
+            .nav-links {
+                gap: 4px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+                padding: 7px 9px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<div class="navbar">
+
+    <div class="logo">
+        Khati<span>Farm</span>
+    </div>
+
+    <div class="nav-links">
+
+        <a th:href="@{/}">
+            Home
+        </a>
+
+        <a th:href="@{/products}">
+            Products
+        </a>
+
+        <a th:href="@{/cart}">
+            🛒 Cart
+        </a>
+
+        <a th:href="@{/customer/dashboard}">
+            Dashboard
+        </a>
+
+        <a th:href="@{/customer/logout}"
+           class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <h1>
+            📦 My Orders
+        </h1>
+
+        <p>
+
+            Track and manage your KhatiFarm orders placed with
+
+            <span class="customer-email"
+                  th:text="${customer.email}">
+                customer@email.com
+            </span>
+
+        </p>
+
+        <!-- ORDER COUNT -->
+
+        <div class="order-count"
+             th:if="${!#lists.isEmpty(orders)}">
+
+            🛍️
+
+            <span th:text="${#lists.size(orders)}">
+                0
+            </span>
+
+            Order(s)
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= NO ORDERS ================= -->
+
+    <div class="empty"
+         th:if="${#lists.isEmpty(orders)}">
+
+        <div class="empty-icon">
+            🛒
+        </div>
+
+        <h2>
+            No Orders Yet
+        </h2>
+
+        <p>
+            You haven't placed any orders yet.
+            Explore our marketplace and discover quality organic products.
+        </p>
+
+        <a th:href="@{/products}"
+           class="shop-btn">
+
+            🛍️ Start Shopping
+
+        </a>
+
+    </div>
+
+
+    <!-- ================= ORDERS ================= -->
+
+    <div th:each="order : ${orders}"
+         class="order-card">
+
+
+        <!-- ORDER HEADER -->
+
+        <div class="order-header">
+
+            <div>
+
+                <div class="order-id-label">
+                    ORDER ID
+                </div>
+
+                <div class="order-id"
+                     th:text="${order.id}">
+
+                    ORDER-ID
+
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="status"
+                 th:text="${order.status}">
+
+                PENDING
+
+            </div>
+
+        </div>
+
+
+        <!-- ORDER INFORMATION -->
+
+        <div class="order-info">
+
+
+            <!-- TOTAL -->
+
+            <div class="info-box">
+
+                <strong>
+                    Total Amount
+                </strong>
+
+                <span class="amount">
+
+                    ৳
+
+                    <span th:text="${order.total}">
+                        0
+                    </span>
+
+                </span>
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div class="info-box">
+
+                <strong>
+                    Payment Method
+                </strong>
+
+                <span th:text="${order.paymentMethod}">
+                    Cash on Delivery
+                </span>
+
+            </div>
+
+
+            <!-- PRODUCTS -->
+
+            <div class="info-box">
+
+                <strong>
+                    Products
+                </strong>
+
+                <span>
+
+                    🛍️
+
+                    <span th:text="${#lists.size(order.items)}">
+                        0
+                    </span>
+
+                    item(s)
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ORDER FOOTER -->
+
+        <div class="order-footer">
+
+            <div class="order-note">
+
+                View your complete order information and products.
+
+            </div>
+
+            <a th:href="@{/my-orders/view/{id}(id=${order.id})}"
+               class="view-btn">
+
+                👁️ View Order Details →
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TRUST ================= -->
+
+    <div class="trust-section"
+         th:if="${!#lists.isEmpty(orders)}">
+
+        <div class="trust-box">
+
+            <div class="trust-icon">
+                🔍
+            </div>
+
+            <strong>
+                Order Tracking
+            </strong>
+
+            <span>
+                Check your order details and current status anytime.
+            </span>
+
+        </div>
+
+
+        <div class="trust-box">
+
+            <div class="trust-icon">
+                🌿
+            </div>
+
+            <strong>
+                Quality Products
+            </strong>
+
+            <span>
+                KhatiFarm products are displayed with quality information.
+            </span>
+
+        </div>
+
+
+        <div class="trust-box">
+
+            <div class="trust-icon">
+                🔒
+            </div>
+
+            <strong>
+                Secure Orders
+            </strong>
+
+            <span>
+                Your order information is available from your account.
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

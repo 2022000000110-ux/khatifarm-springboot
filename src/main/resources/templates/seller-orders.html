@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders | KhatiFarm</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f3;
+            color: #333;
+        }
+
+        /* =========================
+           NAVBAR
+           ========================= */
+
+        .navbar {
+            background: #2e7d32;
+            color: white;
+
+            padding: 15px 6%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           CONTAINER
+           ========================= */
+
+        .container {
+            max-width: 1100px;
+            width: 92%;
+
+            margin: 40px auto;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            color: #2e7d32;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #666;
+        }
+
+        /* =========================
+           SELLER INFO
+           ========================= */
+
+        .seller-info {
+            background: white;
+
+            padding: 18px 20px;
+
+            border-radius: 10px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                    0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .seller-info strong {
+            color: #2e7d32;
+        }
+
+        /* =========================
+           ORDER CARD
+           ========================= */
+
+        .order-card {
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 22px;
+
+            margin-bottom: 20px;
+
+            box-shadow:
+                    0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .order-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding-bottom: 15px;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-id {
+            font-size: 17px;
+
+            font-weight: bold;
+
+            color: #333;
+        }
+
+        .order-id span {
+            color: #2e7d32;
+        }
+
+        /* =========================
+           STATUS
+           ========================= */
+
+        .status {
+            display: inline-block;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            background: #fff3cd;
+
+            color: #856404;
+        }
+
+        /* =========================
+           CUSTOMER INFO
+           ========================= */
+
+        .customer-info {
+            display: grid;
+
+            grid-template-columns:
+                    repeat(2, 1fr);
+
+            gap: 15px;
+
+            margin-top: 18px;
+        }
+
+        .info-box {
+            background: #f8faf8;
+
+            padding: 14px;
+
+            border-radius: 8px;
+
+            border: 1px solid #e5ebe5;
+        }
+
+        .info-label {
+            display: block;
+
+            color: #777;
+
+            font-size: 12px;
+
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-weight: bold;
+
+            word-break: break-word;
+        }
+
+        /* =========================
+           PRODUCTS
+           ========================= */
+
+        .products-title {
+            margin-top: 25px;
+
+            margin-bottom: 12px;
+
+            color: #2e7d32;
+        }
+
+        .product-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 15px;
+
+            margin-bottom: 10px;
+
+            background: #f1f8f1;
+
+            border-radius: 8px;
+
+            border: 1px solid #e1ebe1;
+        }
+
+        .product-name {
+            font-weight: bold;
+
+            margin-bottom: 5px;
+        }
+
+        .product-details {
+            color: #666;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+        }
+
+        .product-price {
+            font-weight: bold;
+
+            color: #2e7d32;
+
+            white-space: nowrap;
+        }
+
+        .seller-badge {
+            display: inline-block;
+
+            background: #2e7d32;
+
+            color: white;
+
+            padding: 4px 9px;
+
+            border-radius: 12px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            margin-top: 5px;
+        }
+
+        /* =========================
+           ORDER TOTAL
+           ========================= */
+
+        .order-total {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-top: 20px;
+
+            padding-top: 18px;
+
+            border-top: 2px solid #eee;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            color: #2e7d32;
+        }
+
+        /* =========================
+           PRIVACY NOTICE
+           ========================= */
+
+        .privacy-notice {
+            margin-top: 18px;
+
+            padding: 12px 15px;
+
+            background: #f5f5f5;
+
+            border-radius: 7px;
+
+            color: #666;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+        /* =========================
+           ACTIONS
+           ========================= */
+
+        .actions {
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 20px;
+
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+
+            padding: 10px 16px;
+
+            border-radius: 6px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+        .btn-dashboard {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-dashboard:hover {
+            background: #256628;
+        }
+
+        .btn-products {
+            background: #eeeeee;
+            color: #333;
+        }
+
+        .btn-products:hover {
+            background: #e0e0e0;
+        }
+
+        /* =========================
+           EMPTY STATE
+           ========================= */
+
+        .empty {
+            background: white;
+
+            padding: 60px 30px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            box-shadow:
+                    0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .empty-icon {
+            font-size: 45px;
+
+            margin-bottom: 10px;
+        }
+
+        .empty h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            color: #777;
+
+            margin-bottom: 20px;
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+            .customer-info {
+                grid-template-columns: 1fr;
+            }
+
+            .order-header {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .product-row {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .product-price {
+                align-self: flex-end;
+            }
+
+            .order-total {
+                font-size: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+     ========================= -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🌱 KhatiFarm
+    </div>
+
+
+    <div class="nav-links">
+
+        <a th:href="@{/seller/dashboard}">
+            Dashboard
+        </a>
+
+        <a th:href="@{/seller/products}">
+            My Products
+        </a>
+
+        <a th:href="@{/seller/orders}">
+            📦 My Orders
+        </a>
+
+        <a th:href="@{/seller/logout}">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MAIN CONTAINER
+     ========================= -->
+
+<div class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <h1>
+            📦 My Orders
+        </h1>
+
+        <p>
+            Orders containing your products are shown here.
+        </p>
+
+    </div>
+
+
+    <!-- SELLER INFORMATION -->
+
+    <div class="seller-info">
+
+        <strong>
+            Seller:
+        </strong>
+
+        <span th:text="${seller.name}">
+            Seller Name
+        </span>
+
+    </div>
+
+
+    <!-- =========================
+         ORDERS
+         ========================= -->
+
+    <div th:if="${orders != null and not #lists.isEmpty(orders)}">
+
+
+        <!-- ORDER CARD -->
+
+        <div class="order-card"
+             th:each="order : ${orders}">
+
+
+            <!-- ORDER HEADER -->
+
+            <div class="order-header">
+
+                <div class="order-id">
+
+                    Order ID:
+
+                    <span th:text="${order.id}">
+                        ORDER-ID
+                    </span>
+
+                </div>
+
+
+                <span class="status"
+                      th:text="${order.status}">
+
+                    PENDING
+
+                </span>
+
+            </div>
+
+
+            <!-- =========================
+                 CUSTOMER INFORMATION
+                 ========================= -->
+
+            <div class="customer-info">
+
+
+                <!-- CUSTOMER NAME -->
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Customer
+                    </span>
+
+                    <span class="info-value"
+                          th:text="${order.customerName}">
+
+                        Customer Name
+
+                    </span>
+
+                </div>
+
+
+                <!-- PAYMENT -->
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Payment Method
+                    </span>
+
+                    <span class="info-value"
+                          th:text="${order.paymentMethod}">
+
+                        Cash on Delivery
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 DELIVERY ADDRESS
+                 ========================= -->
+
+            <div class="info-box"
+                 style="margin-top:15px;">
+
+                <span class="info-label">
+                    Delivery Address
+                </span>
+
+                <span class="info-value"
+                      th:text="${order.address}">
+
+                    Dhaka
+
+                </span>
+
+            </div>
+
+
+            <!-- =========================
+                 PRODUCTS
+                 ========================= -->
+
+            <h3 class="products-title">
+
+                🛍️ Your Products in This Order
+
+            </h3>
+
+
+            <div th:each="item : ${order.items}">
+
+                <div class="product-row"
+                     th:if="${item.sellerName == seller.name}">
+
+
+                    <div>
+
+                        <div class="product-name"
+                             th:text="${item.productName}">
+
+                            Product Name
+
+                        </div>
+
+
+                        <div class="product-details">
+
+                            Quantity:
+
+                            <span th:text="${item.quantity}">
+                                1
+                            </span>
+
+                            × ৳
+
+                            <span th:text="${item.price}">
+                                0
+                            </span>
+
+                            <br>
+
+                            Quality:
+
+                            <span th:text="${item.qualityScore}">
+                                0
+                            </span>/100
+
+                            |
+
+                            Grade:
+
+                            <span th:text="${item.grade}">
+                                A+
+                            </span>
+
+                        </div>
+
+
+                        <span class="seller-badge">
+
+                            Your Product
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="product-price">
+
+                        ৳
+
+                        <span th:text="${item.subtotal}">
+                            0
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 ORDER TOTAL
+                 ========================= -->
+
+            <div class="order-total">
+
+                <span>
+                    Order Total
+                </span>
+
+                <span>
+
+                    ৳
+
+                    <span th:text="${order.total}">
+                        0
+                    </span>
+
+                </span>
+
+            </div>
+
+
+            <!-- =========================
+                 PRIVACY NOTICE
+                 ========================= -->
+
+            <div class="privacy-notice">
+
+                🔒 Customer contact information is kept private.
+                Phone number and email are not displayed to sellers.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         EMPTY ORDERS
+         ========================= -->
+
+    <div class="empty"
+         th:if="${orders == null or #lists.isEmpty(orders)}">
+
+
+        <div class="empty-icon">
+            📦
+        </div>
+
+
+        <h2>
+            No Orders Yet
+        </h2>
+
+
+        <p>
+            You don't have any orders containing
+            your products yet.
+        </p>
+
+
+        <a th:href="@{/seller/products}"
+           class="btn btn-products">
+
+            View My Products
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         ACTIONS
+         ========================= -->
+
+    <div class="actions">
+
+        <a th:href="@{/seller/dashboard}"
+           class="btn btn-dashboard">
+
+            ← Seller Dashboard
+
+        </a>
+
+
+        <a th:href="@{/seller/products}"
+           class="btn btn-products">
+
+            My Products
+
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

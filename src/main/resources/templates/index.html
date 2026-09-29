@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KhatiFarm | Pure Food. Trusted Source.</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/home.css}"
+          href="/css/home.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header class="navbar">
+
+    <!-- BRAND -->
+
+    <a th:href="@{/}" class="brand">
+
+        <span class="brand-leaf">
+            🌱
+        </span>
+
+        <span>
+            KhatiFarm
+        </span>
+
+    </a>
+
+
+    <!-- NAV LINKS -->
+
+    <nav class="nav-links">
+
+        <a th:href="@{/}"
+           class="active">
+
+            Home
+
+        </a>
+
+
+        <a th:href="@{/products}">
+
+            Products
+
+        </a>
+
+
+        <a href="#categories">
+
+            Categories
+
+        </a>
+
+
+        <a href="#about">
+
+            About
+
+        </a>
+
+
+        <a th:href="@{/cart}">
+
+            🛒 Cart
+
+        </a>
+
+
+        <!-- =================================================
+             GUEST USER
+        ================================================= -->
+
+        <a th:if="${loggedInCustomer == null
+                   and loggedInSeller == null
+                   and loggedInAdmin == null}"
+
+           th:href="@{/customer/login}"
+
+           class="login-link">
+
+            Customer Login
+
+        </a>
+
+    </nav>
+
+
+    <!-- =====================================================
+         NAV ACTIONS
+    ===================================================== -->
+
+    <div class="nav-actions">
+
+
+        <!-- =================================================
+             GUEST ACTIONS
+        ================================================= -->
+
+        <th:block th:if="${loggedInCustomer == null
+                          and loggedInSeller == null
+                          and loggedInAdmin == null}">
+
+
+            <a th:href="@{/seller/login}"
+               class="seller-link">
+
+                Seller Login
+
+            </a>
+
+
+            <a th:href="@{/admin/login}"
+               class="admin-link">
+
+                Admin
+
+            </a>
+
+
+            <a th:href="@{/customer/register}"
+               class="nav-register">
+
+                Join
+
+            </a>
+
+        </th:block>
+
+
+
+        <!-- =================================================
+             SELLER LOGGED IN
+        ================================================= -->
+
+        <th:block th:if="${loggedInSeller != null}">
+
+
+            <a th:href="@{/seller/dashboard}"
+               class="seller-link">
+
+                👨‍🌾 Seller Dashboard
+
+            </a>
+
+
+            <a th:href="@{/seller/logout}"
+               class="admin-link">
+
+                Logout
+
+            </a>
+
+        </th:block>
+
+
+
+        <!-- =================================================
+             CUSTOMER LOGGED IN
+        ================================================= -->
+
+        <th:block th:if="${loggedInCustomer != null}">
+
+
+            <a th:href="@{/customer/dashboard}"
+               class="seller-link">
+
+                👤 My Account
+
+            </a>
+
+
+            <a th:href="@{/my-orders}"
+               class="seller-link">
+
+                My Orders
+
+            </a>
+
+
+            <a th:href="@{/customer/logout}"
+               class="admin-link">
+
+                Logout
+
+            </a>
+
+        </th:block>
+
+
+
+        <!-- =================================================
+             ADMIN LOGGED IN
+        ================================================= -->
+
+        <th:block th:if="${loggedInAdmin != null}">
+
+
+            <a th:href="@{/admin/dashboard}"
+               class="admin-link">
+
+                🔐 Admin Dashboard
+
+            </a>
+
+
+            <a th:href="@{/admin/logout}"
+               class="admin-link">
+
+                Logout
+
+            </a>
+
+        </th:block>
+
+
+    </div>
+
+</header>
+
+<!-- =====================================================
+     HERO SECTION
+===================================================== -->
+
+<section class="hero">
+
+    <img class="hero-image"
+         th:src="@{/images/khatifarm-hero.png}"
+         src="/images/khatifarm-hero.png"
+         alt="KhatiFarm organic marketplace">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <span class="eyebrow">
+            🌿 LOCAL • ORGANIC • QUALITY VERIFIED
+        </span>
+
+        <h1>
+            Pure Food.
+            <br>
+            <span>Trusted Source.</span>
+        </h1>
+
+        <p>
+            Authentic organic food from trusted local farmers and KhatiFarm —
+            verified for quality and brought closer to your table.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a th:href="@{/products}"
+               class="btn btn-primary">
+                Explore Products →
+            </a>
+
+            <a th:href="@{/seller/register}"
+               class="btn btn-light">
+                Become a Seller →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TRUST BAR
+===================================================== -->
+
+<section class="trust-bar">
+
+    <div class="trust-item">
+
+        <span>🌱</span>
+
+        <div>
+            <strong>Organic Products</strong>
+            <small>Natural & authentic food</small>
+        </div>
+
+    </div>
+
+
+    <div class="trust-item">
+
+        <span>👨‍🌾</span>
+
+        <div>
+            <strong>Support Local Farmers</strong>
+            <small>Farmers can sell directly</small>
+        </div>
+
+    </div>
+
+
+    <div class="trust-item">
+
+        <span>✓</span>
+
+        <div>
+            <strong>Quality Verified</strong>
+            <small>Score 0–100 & quality grade</small>
+        </div>
+
+    </div>
+
+
+    <div class="trust-item">
+
+        <span>📍</span>
+
+        <div>
+            <strong>Know the Origin</strong>
+            <small>See where products come from</small>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CATEGORIES
+===================================================== -->
+
+<section class="section"
+         id="categories">
+
+    <div class="section-heading">
+
+        <span class="section-kicker">
+            SHOP BY CATEGORY
+        </span>
+
+        <h2>
+            What are you looking for?
+        </h2>
+
+        <p>
+            Explore everyday natural foods from KhatiFarm
+            and local producers.
+        </p>
+
+    </div>
+
+
+    <div class="category-grid">
+
+
+        <!-- HONEY -->
+
+        <a th:href="@{/products/category/Honey}"
+           class="category-card">
+
+            <div class="category-icon">
+                🍯
+            </div>
+
+            <h3>
+                Honey
+            </h3>
+
+            <p>
+                Raw & natural honey
+            </p>
+
+            <span>
+                Explore →
+            </span>
+
+        </a>
+
+
+        <!-- MANGO -->
+
+        <a th:href="@{/products/category/Mango}"
+           class="category-card">
+
+            <div class="category-icon">
+                🥭
+            </div>
+
+            <h3>
+                Mango
+            </h3>
+
+            <p>
+                Seasonal local mangoes
+            </p>
+
+            <span>
+                Explore →
+            </span>
+
+        </a>
+
+
+        <!-- VEGETABLES -->
+
+        <a th:href="@{/products/category/Vegetables}"
+           class="category-card">
+
+            <div class="category-icon">
+                🥬
+            </div>
+
+            <h3>
+                Vegetables
+            </h3>
+
+            <p>
+                Fresh local produce
+            </p>
+
+            <span>
+                Explore →
+            </span>
+
+        </a>
+
+
+        <!-- DRY FOOD -->
+
+        <a th:href="@{/products/category/Dry Food}"
+           class="category-card">
+
+            <div class="category-icon">
+                🥜
+            </div>
+
+            <h3>
+                Dry Food
+            </h3>
+
+            <p>
+                Healthy dried foods
+            </p>
+
+            <span>
+                Explore →
+            </span>
+
+        </a>
+
+
+        <!-- GUR -->
+
+        <a th:href="@{/products/category/Gur}"
+           class="category-card">
+
+            <div class="category-icon">
+                🟫
+            </div>
+
+            <h3>
+                Jaggery
+            </h3>
+
+            <p>
+                Traditional natural gur
+            </p>
+
+            <span>
+                Explore →
+            </span>
+
+        </a>
+
+
+        <!-- ALL PRODUCTS -->
+
+        <a th:href="@{/products}"
+           class="category-card">
+
+            <div class="category-icon">
+                🌿
+            </div>
+
+            <h3>
+                Organic More
+            </h3>
+
+            <p>
+                More natural products
+            </p>
+
+            <span>
+                Explore →
+            </span>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FEATURED PRODUCTS
+     DYNAMIC FROM MONGODB
+===================================================== -->
+
+<section class="section featured-section"
+         id="featured-products">
+
+
+    <!-- SECTION HEADING -->
+
+    <div class="section-heading">
+
+        <span class="section-kicker">
+            KHATIFARM MARKETPLACE
+        </span>
+
+        <h2>
+            Featured Products
+        </h2>
+
+        <p>
+            Discover quality-verified products from KhatiFarm
+            and trusted local sellers.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         PRODUCTS EXIST
+    ================================================= -->
+
+    <div class="featured-product-grid"
+         th:if="${products != null and !#lists.isEmpty(products)}">
+
+
+        <!-- PRODUCT CARD -->
+
+        <div class="featured-product-card"
+             th:each="product, stat : ${products}"
+             th:if="${stat.index < 6}">
+
+
+            <!-- PRODUCT IMAGE -->
+
+            <div class="featured-image">
+
+                <img th:src="@{${product.imageUrl}}"
+                     th:alt="${product.name}">
+
+            </div>
+
+
+            <!-- PRODUCT INFORMATION -->
+
+            <div class="featured-content">
+
+
+                <!-- CATEGORY -->
+
+                <span class="featured-category"
+                      th:text="${product.category}">
+
+                    Category
+
+                </span>
+
+
+                <!-- PRODUCT NAME -->
+
+                <h3 th:text="${product.name}">
+
+                    Product Name
+
+                </h3>
+
+
+                <!-- ORIGIN -->
+
+                <p class="featured-origin">
+
+                    📍
+
+                    <span th:text="${product.origin}">
+                        Origin
+                    </span>
+
+                </p>
+
+
+                <!-- PRICE -->
+
+                <div class="featured-price">
+
+                    ৳
+
+                    <span th:text="${product.price}">
+                        0
+                    </span>
+
+                </div>
+
+
+                <!-- QUALITY -->
+
+                <div class="featured-quality">
+
+                    <span>
+
+                        Quality:
+
+                        <strong th:text="${product.qualityScore}">
+                            0
+                        </strong>
+
+                        /100
+
+                    </span>
+
+
+                    <span class="featured-grade"
+                          th:text="${product.grade}">
+
+                        A+
+
+                    </span>
+
+                </div>
+
+
+                <!-- SELLER TYPE -->
+
+                <div class="featured-source">
+
+
+                    <!-- KHATIFARM PRODUCT -->
+
+                    <span th:if="${product.sellerType == 'KHATIFARM'}"
+                          class="official-product">
+
+                        ✓ Official KhatiFarm
+
+                    </span>
+
+
+                    <!-- LOCAL SELLER -->
+
+                    <span th:if="${product.sellerType == 'SELLER'}"
+                          class="local-seller">
+
+                        👨‍🌾 Local Seller
+
+                    </span>
+
+
+                    <!-- OLD / LEGACY PRODUCT -->
+
+                    <span th:if="${product.sellerType == null}"
+                          class="local-seller">
+
+                        👨‍🌾 Seller
+
+                    </span>
+
+                </div>
+
+
+                <!-- VIEW DETAILS -->
+
+                <a th:href="@{/products/{id}(id=${product.id})}"
+                   class="featured-view-btn">
+
+                    View Details →
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         NO PRODUCT AVAILABLE
+    ================================================= -->
+
+    <div class="featured-empty"
+         th:if="${products == null or #lists.isEmpty(products)}">
+
+        <h3>
+            No featured products available yet.
+        </h3>
+
+        <p>
+            Approved products will appear here.
+        </p>
+
+    </div>
+
+
+    <!-- =================================================
+         VIEW ALL
+    ================================================= -->
+
+    <div class="featured-more">
+
+        <a th:href="@{/products}"
+           class="btn btn-primary">
+
+            View All Products →
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     QUALITY-BASED MARKETPLACE
+===================================================== -->
+
+<section class="marketplace-section">
+
+    <div class="marketplace-copy">
+
+        <span class="section-kicker">
+            QUALITY-BASED MARKETPLACE
+        </span>
+
+        <h2>
+            Choose food with more information.
+        </h2>
+
+        <p>
+            KhatiFarm is more than a traditional online shop.
+            Local farmers and sellers can submit their products,
+            while KhatiFarm verifies products before they become
+            available in the marketplace.
+        </p>
+
+
+        <div class="quality-points">
+
+            <div>
+                <b>01</b>
+                <span>Product origin is displayed</span>
+            </div>
+
+            <div>
+                <b>02</b>
+                <span>Quality Score from 0–100</span>
+            </div>
+
+            <div>
+                <b>03</b>
+                <span>Grade such as A+, A or B</span>
+            </div>
+
+            <div>
+                <b>04</b>
+                <span>Admin-approved marketplace price</span>
+            </div>
+
+        </div>
+
+
+        <a th:href="@{/products}"
+           class="btn btn-primary">
+
+            Browse Marketplace →
+
+        </a>
+
+    </div>
+
+
+    <!-- QUALITY EXAMPLE CARD -->
+
+    <div class="quality-card">
+
+        <div class="score-circle">
+
+            92
+
+            <span>
+                /100
+            </span>
+
+        </div>
+
+
+        <div>
+
+            <p class="mini-label">
+                EXAMPLE QUALITY SCORE
+            </p>
+
+            <h3>
+                Premium Organic Honey
+            </h3>
+
+            <p class="muted">
+                Origin: Sundarban
+            </p>
+
+            <span class="grade-badge">
+                A+ QUALITY
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SELLER SECTION
+===================================================== -->
+
+<section class="seller-section">
+
+    <div class="seller-card">
+
+
+        <div class="seller-icon">
+            👨‍🌾
+        </div>
+
+
+        <div>
+
+            <span class="section-kicker">
+                FOR FARMERS & LOCAL SELLERS
+            </span>
+
+            <h2>
+                Have a quality product to sell?
+            </h2>
+
+            <p>
+                Join the KhatiFarm marketplace.
+                Submit your product, manage your stock
+                and reach customers. Products go through
+                verification before approval.
+            </p>
+
+        </div>
+
+
+        <div class="seller-actions">
+
+            <a th:href="@{/seller/register}"
+               class="btn btn-primary">
+
+                Become a Seller
+
+            </a>
+
+
+            <a th:href="@{/seller/login}"
+               class="text-link">
+
+                Already a seller? Login →
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT KHATIFARM
+===================================================== -->
+
+<section class="about-section"
+         id="about">
+
+
+    <div class="about-image">
+
+        <img th:src="@{/images/khatifarm-hero.png}"
+             src="/images/khatifarm-hero.png"
+             alt="Local farmers and organic products">
+
+    </div>
+
+
+    <div class="about-copy">
+
+        <span class="section-kicker">
+            ABOUT KHATIFARM
+        </span>
+
+        <h2>
+            From local producers to your table.
+        </h2>
+
+
+        <p>
+            KhatiFarm brings together its own organic products
+            and products from local farmers and sellers
+            in one marketplace.
+        </p>
+
+
+        <p>
+            Our marketplace focuses on product quality,
+            origin, seller information and transparent pricing
+            so customers can make informed choices.
+        </p>
+
+
+        <div class="about-stats">
+
+            <div>
+
+                <strong>
+                    0–100
+                </strong>
+
+                <span>
+                    Quality Score
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    A+ / A / B
+                </strong>
+
+                <span>
+                    Quality Grades
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Local
+                </strong>
+
+                <span>
+                    Farmer Marketplace
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FINAL CTA
+===================================================== -->
+
+<section class="final-cta">
+
+    <span>
+        🌿 NATURAL • LOCAL • TRUSTED
+    </span>
+
+    <h2>
+        Bring better food to your everyday life.
+    </h2>
+
+    <p>
+        Discover quality-verified products from KhatiFarm
+        and local producers.
+    </p>
+
+    <a th:href="@{/products}"
+       class="btn btn-light">
+
+        Start Shopping →
+
+    </a>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+
+    <div class="footer-main">
+
+
+        <!-- BRAND -->
+
+        <div>
+
+            <a th:href="@{/}"
+               class="footer-brand">
+
+                🌱 KhatiFarm
+
+            </a>
+
+            <p>
+                Pure Food. Trusted Source.
+            </p>
+
+            <small>
+                Organic products • Local farmers •
+                Quality-based marketplace
+            </small>
+
+        </div>
+
+
+        <!-- MARKETPLACE -->
+
+        <div class="footer-links">
+
+            <h4>
+                Marketplace
+            </h4>
+
+            <a th:href="@{/products}">
+                Products
+            </a>
+
+            <a th:href="@{/cart}">
+                Cart
+            </a>
+
+            <a th:href="@{/seller/register}">
+                Become a Seller
+            </a>
+
+        </div>
+
+
+        <!-- CUSTOMER -->
+
+        <div class="footer-links">
+
+            <h4>
+                Customer
+            </h4>
+
+            <a th:href="@{/customer/login}">
+                Customer Login
+            </a>
+
+            <a th:href="@{/customer/register}">
+                Create Account
+            </a>
+
+        </div>
+
+
+        <!-- MANAGEMENT -->
+
+        <div class="footer-links admin-area">
+
+            <h4>
+                Management
+            </h4>
+
+            <a th:href="@{/admin/login}">
+                🔐 Admin Login
+            </a>
+
+            <small>
+                For KhatiFarm administration
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER BOTTOM -->
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 KhatiFarm. All rights reserved.
+        </span>
+
+        <span>
+            Made for local organic products & producers.
+        </span>
+
+    </div>
+
+</footer>
+
+
+</body>
+</html>
